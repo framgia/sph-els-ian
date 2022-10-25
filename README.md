@@ -1,4 +1,5 @@
-# sph-else-ian
+# sph-els-ian
 
 ## Project Setup
-1. `npm install` 
+
+1. `npm install`

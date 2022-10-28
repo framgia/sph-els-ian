@@ -4,5 +4,4 @@
 
 1. `npm install` on the folder
 2. create and fill the .env file according to the template
-3. migrate database using `~~npm run migrate~~`
-4. `npm run server`
+3. `npm run server`

@@ -12,8 +12,10 @@
     "express-async-handler": "^1.2.0",
     "jsonwebtoken": "^8.5.1",
     "luxon": "^3.0.4",
+    "mysql2": "^2.3.3",
     "nodemon": "^2.0.20",
     "sequelize": "^6.25.3",
+    "sequelize-cli": "^6.5.2",
     "sqlstring": "^2.3.3"
   },
   "devDependencies": {},
@@ -21,7 +23,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "server": "nodemon src/server.js",
     "start": "node src/server.js",
-    "migrate": "echo 'not yet working'"
+    "create-db": "cd src && sequelize db:create",
+    "migrate-db": "cd src && sequelize-cli db:migrate",
+    "seed-db": "cd src && sequelize-cli db:seed:all"
   },
   "author": "",
   "license": "ISC"

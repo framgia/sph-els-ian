@@ -4,7 +4,17 @@
   "description": "",
   "main": "src/server.js",
   "dependencies": {
-    "express": "^4.18.2"
+    "@faker-js/faker": "^7.6.0",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-async-handler": "^1.2.0",
+    "jsonwebtoken": "^8.5.1",
+    "luxon": "^3.0.4",
+    "nodemon": "^2.0.20",
+    "sequelize": "^6.25.3",
+    "sqlstring": "^2.3.3"
   },
   "devDependencies": {},
   "scripts": {

@@ -7,6 +7,7 @@ const cors = require("cors");
 //Local Variables/Packages
 const port = process.env.PORT || 5000;
 const db = require("./models");
+const { errorHandler } = require("./middleware/errorMiddleware");
 
 //Options
 var corsOptions = {
@@ -27,5 +28,11 @@ app.post("/", (req, res) => {
   res.status(200).json({ msg: "Backend Post Working" });
 });
 
+app.get("/1", (req, res) => {
+  res.status(400);
+  throw new Error("Custom Error");
+});
+
 //import error handler
+app.use(errorHandler);
 app.listen(port, () => console.log(`Server started on port ${port}`));

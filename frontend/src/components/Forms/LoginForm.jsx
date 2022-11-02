@@ -27,6 +27,7 @@ const LoginForm = ({ modal, setModal, modalMsg, setModalMsg }) => {
       .then((response) => {
         window.localStorage.setItem("data", JSON.stringify(response.data));
         window.localStorage.setItem("accessToken", response.data.token);
+        navigate("/dashboard");
       })
       .catch((error) => {
         if (error.code === "ERR_NETWORK") {

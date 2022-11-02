@@ -26,3 +26,18 @@ export const validateRegistrationForm = (
   }
   return errors;
 };
+
+export const validateLoginForm = (username, password, errors) => {
+  errors = {
+    username: "",
+    password: "",
+  };
+  if (username === "") {
+    errors = { ...errors, username: "Missing Username" };
+  }
+
+  if (password === "") {
+    errors = { ...errors, password: "Missing Password" };
+  }
+  return errors;
+};

@@ -11,7 +11,7 @@ const { errorHandler } = require("./middleware/errorMiddleware");
 
 //Options
 var corsOptions = {
-  origin: "http:localhost:3000",
+  origin: "http://localhost:3000",
 };
 
 //Package Middleware

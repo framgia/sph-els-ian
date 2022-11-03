@@ -24,13 +24,9 @@ app.get("/", (req, res) => {
   res.status(200).json({ msg: "Backend Working" });
 });
 
-app.post("/", (req, res) => {
-  res.status(200).json({ msg: "Backend Post Working" });
-});
-
-app.get("/1", (req, res) => {
-  res.status(400);
-  throw new Error("Custom Error");
+app.get("*", (req, res) => {
+  res.status(404);
+  throw new Error("Request not found");
 });
 
 //import error handler

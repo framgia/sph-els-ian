@@ -24,6 +24,8 @@ app.get("/", (req, res) => {
   res.status(200).json({ msg: "Backend Working" });
 });
 
+app.use("/api/auth", require("./routes/auth/authRoutes"));
+
 app.all("*", (req, res) => {
   res.status(404);
   throw new Error("Request not found");

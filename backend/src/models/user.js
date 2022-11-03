@@ -1,4 +1,5 @@
 "use strict";
+const bcrypt = require("bcryptjs");
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
@@ -15,15 +16,44 @@ module.exports = (sequelize, DataTypes) => {
   }
   User.init(
     {
-      username: DataTypes.STRING,
-      password: DataTypes.STRING,
-      avatar: DataTypes.STRING,
-      isAdmin: DataTypes.BOOLEAN,
+      id: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      username: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: {
+          args: true,
+          msg: "Username is already in use",
+        },
+        validate: {
+          isAlphanumeric: {
+            msg: "Can only contain alphanumeric symbols",
+          },
+        },
+      },
+      password: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      avatar: {
+        type: DataTypes.STRING,
+      },
+      isAdmin: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: 0,
+      },
     },
     {
       sequelize,
       modelName: "User",
     }
   );
+  User.validatePassword = (password) => {
+    return bcrypt.compare(password, user.password);
+  };
   return User;
 };

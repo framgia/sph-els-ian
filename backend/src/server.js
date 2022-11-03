@@ -18,6 +18,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+//Routes
 app.get("/", (req, res) => {
   res.status(200).json({ msg: "Backend Working" });
 });
@@ -27,5 +28,4 @@ app.post("/", (req, res) => {
 });
 
 //import error handler
-
 app.listen(port, () => console.log(`Server started on port ${port}`));

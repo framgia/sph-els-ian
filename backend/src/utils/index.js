@@ -22,7 +22,12 @@ const addJWTToken = async (payload) => {
 const generateHash = async (password) => {
   return bcrypt.hash(password, await bcrypt.genSalt(10));
 };
+
+const validatePassword = async (password, db_password) => {
+  return await bcrypt.compare(password, db_password);
+};
 module.exports = {
+  validatePassword,
   removePassword,
   addJWTToken,
   generateJWTToken,

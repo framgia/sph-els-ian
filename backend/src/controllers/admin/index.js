@@ -29,4 +29,19 @@ const addLesson = asyncHandler(async (req, res) => {
   res.status(200).json({ data: new_lesson });
 });
 
-module.exports = { addLesson };
+const viewLessons = asyncHandler(async (req, res) => {
+  //set Offset
+  let offset = req.params.offset || 0;
+  offset = Number(offset);
+  let limit = 10;
+  //Search for titles
+  let lessons = await Lesson.findAll({
+    limit: limit,
+    offset: offset * limit,
+  });
+  let total = await Lesson.count();
+  //deliver success payload
+  res.status(200).json({ data: lessons, totalLessons: total });
+});
+
+module.exports = { addLesson, viewLessons };

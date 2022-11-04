@@ -1,5 +1,5 @@
 "use strict";
-
+const { generateHash } = require("../utils");
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -15,7 +15,7 @@ module.exports = {
     return queryInterface.bulkInsert("Users", [
       {
         username: "John",
-        password: "1234",
+        password: await generateHash("1234"),
         avatar: "ehhhhhh",
         createdAt: new Date(),
         updatedAt: new Date(),

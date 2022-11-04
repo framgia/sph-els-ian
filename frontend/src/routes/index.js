@@ -7,7 +7,7 @@ import PageNotFound from "../pages/PageNotFound";
 import Layout from "../components/Layout";
 import ProtectedRoutes from "../components/ProtectedRoutes";
 import Dashboard from "../pages/Dashboard";
-
+import LessonPage from "../pages/LessonPage";
 const RouteList = () => {
   return (
     <BrowserRouter>
@@ -34,6 +34,10 @@ const RouteList = () => {
               element={<Dashboard />}
             />
           </Route>
+          <Route
+            path="admin/lessons"
+            element={<LessonPage />}
+          />
           <Route
             path="*"
             element={<PageNotFound />}

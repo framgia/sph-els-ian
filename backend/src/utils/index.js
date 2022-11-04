@@ -15,14 +15,11 @@ const generateJWTToken = (id) => {
 };
 
 const addJWTToken = async (payload) => {
-  console.log("ok");
-  console.log(payload);
   payload = { ...payload, token: await generateJWTToken(payload.id) };
   return payload;
 };
 
 const generateHash = async (password) => {
-  console.log(password);
   return bcrypt.hash(password, await bcrypt.genSalt(10));
 };
 module.exports = {

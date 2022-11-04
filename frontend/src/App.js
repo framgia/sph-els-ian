@@ -1,8 +1,8 @@
-import Directory from "./routes";
+import RouteList from "./routes";
 const App = () => {
   return (
     <div className="App ui component">
-      <Directory />
+      <RouteList />
     </div>
   );
 };

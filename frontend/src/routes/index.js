@@ -7,7 +7,7 @@ import Login from "../pages/Login";
 import Register from "../pages/Register";
 import PageNotFound from "../pages/PageNotFound";
 
-const Directory = () => {
+const RouteList = () => {
   return (
     <HashRouter>
       <Header />
@@ -33,4 +33,4 @@ const Directory = () => {
     </HashRouter>
   );
 };
-export default Directory;
+export default RouteList;

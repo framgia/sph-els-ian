@@ -34,9 +34,6 @@ const registerUser = asyncHandler(async (req, res) => {
   //remove password
   new_user = await removePassword(new_user.dataValues);
 
-  //create jwt token
-  new_user = await addJWTToken(new_user);
-
   //send back
   res.status(200).json(new_user);
 });

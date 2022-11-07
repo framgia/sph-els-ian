@@ -1,4 +1,4 @@
-.App {
+/* .App {
   text-align: center;
 }
 
@@ -35,4 +35,12 @@
   to {
     transform: rotate(360deg);
   }
+} */
+.App {
+  position: relative;
+  min-height: 100vh;
+}
+
+.Footer {
+  position: fixed;
 }

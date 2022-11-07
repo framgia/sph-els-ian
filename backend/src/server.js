@@ -31,8 +31,6 @@ app.all("*", (req, res) => {
   throw new Error("Request not found");
 });
 
-app.use("/api/auth", require("./routes/auth"));
-
 //import error handler
 app.use(errorHandler);
 app.listen(port, () => console.log(`Server started on port ${port}`));

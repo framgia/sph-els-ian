@@ -52,8 +52,6 @@ module.exports = (sequelize, DataTypes) => {
       modelName: "User",
     }
   );
-  User.validatePassword = (password) => {
-    return bcrypt.compare(password, user.password);
-  };
+
   return User;
 };

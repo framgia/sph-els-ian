@@ -1,6 +1,11 @@
 const asyncHandler = require("express-async-handler");
 const { User } = require("../../models");
-const { removePassword, addJWTToken, generateHash } = require("../../utils");
+const {
+  removePassword,
+  addJWTToken,
+  generateHash,
+  validatePassword,
+} = require("../../utils");
 const registerUser = asyncHandler(async (req, res) => {
   //check payload
   const { username, password } = req.body;
@@ -36,4 +41,39 @@ const registerUser = asyncHandler(async (req, res) => {
   res.status(200).json(new_user);
 });
 
-module.exports = { registerUser };
+const loginUser = asyncHandler(async (req, res) => {
+  //check payload
+  const { username, password } = req.body;
+
+  //error if fail
+  if (!username || !password) {
+    res.status(400);
+    throw new Error("Missing Username/Password");
+  }
+
+  //check if user exists
+  let user = await User.findOne({ where: { username: username } });
+
+  //error if success
+  if (user === null) {
+    res.status(400);
+    throw new Error("User does not exists");
+  }
+
+  //validate password
+  user = user.dataValues;
+  if (!(await validatePassword(password, user.password))) {
+    res.status(400);
+    throw new Error("Wrong Password");
+  }
+
+  //remove password
+  user = await removePassword(user);
+
+  //create jwt token
+  user = await addJWTToken(user);
+
+  //send back
+  res.status(200).json(user);
+});
+module.exports = { registerUser, loginUser };

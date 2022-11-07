@@ -41,3 +41,19 @@ export const validateLoginForm = (username, password, errors) => {
   }
   return errors;
 };
+
+export const validateLessonModal = (title, description) => {
+  let errors = {
+    title: "",
+    description: "",
+    server: "",
+  };
+  if (title === "") {
+    errors = { ...errors, title: "Missing Title" };
+  }
+
+  if (description === "") {
+    errors = { ...errors, description: "Missing Description" };
+  }
+  return errors;
+};

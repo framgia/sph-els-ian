@@ -7,7 +7,7 @@ import PageNotFound from "../pages/PageNotFound";
 import Layout from "../components/Layout";
 import ProtectedRoutes from "../components/ProtectedRoutes";
 import Dashboard from "../pages/Dashboard";
-import LessonPage from "../pages/LessonPage";
+import LessonListPage from "../pages/LessonListPage";
 const RouteList = () => {
   return (
     <BrowserRouter>
@@ -36,7 +36,7 @@ const RouteList = () => {
           </Route>
           <Route
             path="admin/lessons"
-            element={<LessonPage />}
+            element={<LessonListPage />}
           />
           <Route
             path="*"

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import ErrorModal from "../components/ErrorModal";
+import ErrorModal from "../components/Modals/ErrorModal";
 import RegistrationForm from "../components/Forms/RegistrationForm";
 
 const Register = () => {

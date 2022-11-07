@@ -27,19 +27,19 @@ const LessonsTable = ({ lessons }) => {
           <Table.Row>
             <Table.HeaderCell
               className="table row"
-              width={4}
+              width={3}
             >
               Title
             </Table.HeaderCell>
             <Table.HeaderCell
               className="table row"
-              width={12}
+              width={7}
             >
               Description
             </Table.HeaderCell>
             <Table.HeaderCell
               className="table row"
-              width={5}
+              width={2}
             >
               Actions
             </Table.HeaderCell>
@@ -76,13 +76,15 @@ const LessonsTable = ({ lessons }) => {
             })}
         </Table.Body>
       </Table>
-      <Pagination
-        activePage={activePage}
-        pointing
-        secondary
-        totalPages={Math.floor(lessons.totalLessons / 10) + 1 || 1}
-        onPageChange={paginationHandler}
-      />
+      <div className="ui center aligned grid">
+        <Pagination
+          activePage={activePage}
+          pointing
+          secondary
+          totalPages={Math.floor(lessons.totalLessons / 10) + 1 || 1}
+          onPageChange={paginationHandler}
+        />
+      </div>
     </div>
   );
 };

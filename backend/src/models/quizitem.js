@@ -10,8 +10,8 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       const { Quiz, Word } = models;
-      QuizItem.belongsTo(Quiz);
-      QuizItem.belongsTo(Word);
+      QuizItem.belongsTo(Quiz, { foreignKey: "quiz_id" });
+      QuizItem.belongsTo(Word, { foreignKey: "word_id" });
     }
   }
   QuizItem.init(

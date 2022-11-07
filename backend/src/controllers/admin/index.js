@@ -27,7 +27,6 @@ const addLesson = asyncHandler(async (req, res) => {
 
   //deliver success payload
   res.status(200).json({ data: new_lesson });
-  //   res.status(200).json({ msg: "lesson added" });
 });
 
 module.exports = { addLesson };

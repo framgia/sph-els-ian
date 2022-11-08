@@ -51,3 +51,7 @@ span {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.WordsTable > thead > tr > th {
+  background-color: #b3ffff !important;
+}

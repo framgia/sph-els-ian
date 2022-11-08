@@ -25,3 +25,20 @@ export const fetchLessons =
       payload: payload,
     });
   };
+
+export const fetchWords =
+  (offset = 0, lesson_id) =>
+  async (dispatch, getState) => {
+    const words = await server.post(`/api/admin/viewLessonWords/${offset}`, {
+      lesson_id,
+    });
+    let payload = {
+      offset,
+      data: words.data.data,
+      totalWords: words.data.totalWords,
+    };
+    dispatch({
+      type: "FETCH_WORDS",
+      payload: payload,
+    });
+  };

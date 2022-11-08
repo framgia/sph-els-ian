@@ -1,6 +1,7 @@
 import { Table, Pagination, Button, Icon } from "semantic-ui-react";
 import { useEffect, useState } from "react";
 import { connect, useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 import { fetchLessons } from "../actions";
 import { totalPages } from "../utils";
 import { viewLessonsRows } from "../utils/constant";
@@ -22,6 +23,7 @@ const LessonsTable = ({ lessons }) => {
       <Table
         fixed
         celled
+        structured
         color="black"
       >
         <Table.Header>
@@ -52,7 +54,9 @@ const LessonsTable = ({ lessons }) => {
               return (
                 <Table.Row key={lesson.id}>
                   <Table.Cell className="table row">
-                    <p>{lesson.title}</p>
+                    <Link to={`${lesson.id}`}>
+                      <span>{lesson.title}</span>
+                    </Link>
                   </Table.Cell>
                   <Table.Cell className="table row">
                     <span>{lesson.description}</span>

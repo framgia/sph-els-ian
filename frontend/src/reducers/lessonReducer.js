@@ -2,7 +2,7 @@ const initial_state = {
   offset: -1,
   data: [],
 };
-export default (state = initial_state, action) => {
+const lessonReducer = (state = initial_state, action) => {
   switch (action.type) {
     case "FETCH_LESSONS":
       return action.payload;
@@ -10,3 +10,4 @@ export default (state = initial_state, action) => {
       return state;
   }
 };
+export default lessonReducer;

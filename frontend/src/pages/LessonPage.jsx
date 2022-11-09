@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Button } from "semantic-ui-react";
-import LessonsTable from "../components/LessonsTable";
-import AddLessonModal from "../components/Modals/AddLessonModal";
+import AddWordModal from "../components/Modals/AddWordModal.jsx";
 import WordsTable from "../components/WordsTable";
 import { Link } from "react-router-dom";
 const LessonPage = (props) => {
@@ -28,7 +27,7 @@ const LessonPage = (props) => {
               color="green"
               className="ui right floated"
               style={{ marginBottom: 5 }}
-              //TODO   onClick={() => setModal(true)}
+              onClick={() => setModal(true)}
             >
               Add New Word
             </Button>
@@ -36,10 +35,10 @@ const LessonPage = (props) => {
           </div>
         </div>
       </div>
-      {/*TODO <AddLessonModal
+      <AddWordModal
         modal={modal}
         setModal={setModal}
-      /> */}
+      />
     </div>
   );
 };

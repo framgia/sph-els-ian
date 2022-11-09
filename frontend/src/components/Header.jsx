@@ -41,7 +41,7 @@ const Header = ({ user = {} }) => {
           </Menu.Item>
           <Menu.Item
             as={Link}
-            to="/login"
+            to="/register"
           >
             Register
           </Menu.Item>

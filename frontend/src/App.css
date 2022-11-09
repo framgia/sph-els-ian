@@ -45,14 +45,6 @@
   position: fixed;
 }
 
-/* .table.row {
-  height: 0;
-  max-height: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: normal;
-  word-wrap: break-word;
-} */
 span {
   height: 3em;
   display: inline-block;

@@ -2,9 +2,9 @@ const asyncHandler = require("express-async-handler");
 const { User } = require("../../models");
 const {
   removePassword,
+  validatePassword,
   addJWTToken,
   generateHash,
-  validatePassword,
 } = require("../../utils");
 const registerUser = asyncHandler(async (req, res) => {
   //check payload
@@ -37,7 +37,6 @@ const registerUser = asyncHandler(async (req, res) => {
   //send back
   res.status(200).json(new_user);
 });
-
 const loginUser = asyncHandler(async (req, res) => {
   //check payload
   const { username, password } = req.body;
@@ -50,13 +49,11 @@ const loginUser = asyncHandler(async (req, res) => {
 
   //check if user exists
   let user = await User.findOne({ where: { username: username } });
-
   //error if success
   if (user === null) {
     res.status(400);
     throw new Error("User does not exists");
   }
-
   //validate password
   user = user.dataValues;
   if (!(await validatePassword(password, user.password))) {
@@ -66,7 +63,6 @@ const loginUser = asyncHandler(async (req, res) => {
 
   //remove password
   user = await removePassword(user);
-
   //create jwt token
   user = await addJWTToken(user);
 

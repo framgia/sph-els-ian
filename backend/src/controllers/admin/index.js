@@ -2,7 +2,7 @@ const asyncHandler = require("express-async-handler");
 const path = require("path");
 require("dotenv").config({ path: path.resolve(__dirname, ".env") });
 const { Lesson } = require("../../models");
-const user = require("../../models/user");
+const { DB_LIMIT } = require("../../utils/constant");
 const addLesson = asyncHandler(async (req, res) => {
   //parse and check payload
   const { title, description } = req.body;
@@ -29,4 +29,20 @@ const addLesson = asyncHandler(async (req, res) => {
   res.status(200).json({ data: new_lesson });
 });
 
-module.exports = { addLesson };
+const viewLessons = asyncHandler(async (req, res) => {
+  //set Offset
+  let offset = req.params.offset || 0;
+  if (isNaN(offset) || offset < 0) {
+    offset = 0;
+  }
+  //Search for titles
+  let lessons = await Lesson.findAll({
+    limit: DB_LIMIT,
+    offset: offset * DB_LIMIT,
+  });
+  let total = await Lesson.count();
+  //deliver success payload
+  res.status(200).json({ data: lessons, totalLessons: total });
+});
+
+module.exports = { addLesson, viewLessons };

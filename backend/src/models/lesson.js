@@ -10,8 +10,8 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       const { Quiz, Word } = models;
-      Lesson.hasMany(Quiz);
-      Lesson.hasMany(Word);
+      Lesson.hasMany(Quiz, { foreignKey: "lesson_id" });
+      Lesson.hasMany(Word, { foreignKey: "lesson_id" });
     }
   }
   Lesson.init(

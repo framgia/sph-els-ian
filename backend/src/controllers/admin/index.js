@@ -35,11 +35,10 @@ const viewLessons = asyncHandler(async (req, res) => {
   if (isNaN(offset) || offset < 0) {
     offset = 0;
   }
-  let limit = DB_LIMIT;
   //Search for titles
   let lessons = await Lesson.findAll({
-    limit: limit,
-    offset: offset * limit,
+    limit: DB_LIMIT,
+    offset: offset * DB_LIMIT,
   });
   let total = await Lesson.count();
   //deliver success payload

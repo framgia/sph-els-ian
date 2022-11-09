@@ -20,7 +20,6 @@ const WordsTable = ({ words }) => {
 
   return (
     <div>
-      {console.log(words)}
       <Table
         fixed
         celled

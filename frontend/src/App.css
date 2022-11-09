@@ -44,3 +44,10 @@
 .Footer {
   position: fixed;
 }
+
+span {
+  height: 3em;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

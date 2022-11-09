@@ -2,9 +2,8 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Form } from "semantic-ui-react";
 import server from "../../api/server";
-import { useForm } from "react-hook-form";
 import { validateLoginForm } from "../../utils";
-const LoginForm = (props) => {
+const LoginForm = ({ modal, setModal, modalMsg, setModalMsg }) => {
   const navigate = useNavigate();
   const didMount = useRef(false);
   const [username, setUsername] = useState("");
@@ -31,17 +30,17 @@ const LoginForm = (props) => {
       })
       .catch((error) => {
         if (error.code === "ERR_NETWORK") {
-          props.setModalMsg({
+          setModalMsg({
             header: "503",
             description: "Server Unavailable",
           });
-          props.setModal(true);
+          setModal(true);
         } else {
-          props.setModalMsg({
+          setModalMsg({
             header: error.response.statusText,
             description: error.response.data.message,
           });
-          props.setModal(true);
+          setModal(true);
         }
       });
   };

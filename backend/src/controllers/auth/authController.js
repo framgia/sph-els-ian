@@ -56,7 +56,6 @@ const loginUser = asyncHandler(async (req, res) => {
   }
   //validate password
   user = user.dataValues;
-  console.log(user);
   if (!(await validatePassword(password, user.password))) {
     res.status(400);
     throw new Error("Wrong Password");

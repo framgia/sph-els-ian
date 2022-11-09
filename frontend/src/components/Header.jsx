@@ -1,14 +1,56 @@
 import { Link } from "react-router-dom";
-const Header = () => {
+import { Menu } from "semantic-ui-react";
+import { connect } from "react-redux";
+import { useState, useEffect } from "react";
+const Header = ({ user = {} }) => {
+  const [hasUser, setHasUser] = useState(false);
+  useEffect(() => {
+    if (Object.keys(user).length === 0) {
+      setHasUser(false);
+    } else {
+      setHasUser(true);
+    }
+  }, [user]);
   return (
-    <div className="Header ui secondary pointing menu">
-      <Link
+    <Menu
+      inverted
+      size="large"
+    >
+      <Menu.Item
+        as={Link}
         to="/"
-        className="item"
       >
         Home
-      </Link>
-    </div>
+      </Menu.Item>
+      {hasUser ? (
+        <Menu.Menu position="right">
+          <Menu.Item
+            as={Link}
+            to="/admin/lessons"
+          >
+            Lessons
+          </Menu.Item>
+        </Menu.Menu>
+      ) : (
+        <Menu.Menu position="right">
+          <Menu.Item
+            as={Link}
+            to="/login"
+          >
+            Login
+          </Menu.Item>
+          <Menu.Item
+            as={Link}
+            to="/register"
+          >
+            Register
+          </Menu.Item>
+        </Menu.Menu>
+      )}
+    </Menu>
   );
 };
-export default Header;
+const mapStateToProps = (state) => {
+  return { user: state.user };
+};
+export default connect(mapStateToProps, {})(Header);

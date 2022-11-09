@@ -1,9 +1,11 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Form } from "semantic-ui-react";
+import { connect } from "react-redux";
 import server from "../../api/server";
+import { setUser } from "../../actions";
 import { validateLoginForm } from "../../utils";
-const LoginForm = ({ modal, setModal, modalMsg, setModalMsg }) => {
+const LoginForm = ({ modal, setModal, modalMsg, setModalMsg, setUser }) => {
   const navigate = useNavigate();
   const didMount = useRef(false);
   const [username, setUsername] = useState("");
@@ -27,6 +29,8 @@ const LoginForm = ({ modal, setModal, modalMsg, setModalMsg }) => {
       .then((response) => {
         window.localStorage.setItem("data", JSON.stringify(response.data));
         window.localStorage.setItem("accessToken", response.data.token);
+        setUser(response.data);
+        navigate("/dashboard");
       })
       .catch((error) => {
         if (error.code === "ERR_NETWORK") {
@@ -110,4 +114,7 @@ const LoginForm = ({ modal, setModal, modalMsg, setModalMsg }) => {
   );
 };
 
-export default LoginForm;
+const mapStateToProps = (state) => {
+  return { user: state.user };
+};
+export default connect(mapStateToProps, { setUser })(LoginForm);

@@ -1,4 +1,4 @@
-import { HashRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Homepage from "../pages/Homepage";
 import Login from "../pages/Login";
@@ -10,7 +10,7 @@ import Dashboard from "../pages/Dashboard";
 
 const RouteList = () => {
   return (
-    <HashRouter>
+    <BrowserRouter>
       <Routes>
         <Route
           path="/"
@@ -40,7 +40,7 @@ const RouteList = () => {
           />
         </Route>
       </Routes>
-    </HashRouter>
+    </BrowserRouter>
   );
 };
 export default RouteList;

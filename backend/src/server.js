@@ -26,6 +26,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/auth", require("./routes/auth/authRoutes"));
 app.use("/api/admin", require("./routes/admin"));
+app.use("/user", require("./routes/user"));
 app.all("*", (req, res) => {
   res.status(404);
   throw new Error("Request not found");

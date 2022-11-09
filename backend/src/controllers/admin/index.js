@@ -2,7 +2,7 @@ const asyncHandler = require("express-async-handler");
 const path = require("path");
 require("dotenv").config({ path: path.resolve(__dirname, ".env") });
 const { Lesson } = require("../../models");
-const { DB_LIMIT } = require("../../utils");
+const { DB_LIMIT } = require("../../utils/constant");
 const addLesson = asyncHandler(async (req, res) => {
   //parse and check payload
   const { title, description } = req.body;

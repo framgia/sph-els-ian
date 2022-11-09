@@ -27,7 +27,6 @@ const validatePassword = async (password, db_password) => {
   return await bcrypt.compare(password, db_password);
 };
 module.exports = {
-  DB_LIMIT: 10,
   validatePassword,
   removePassword,
   addJWTToken,

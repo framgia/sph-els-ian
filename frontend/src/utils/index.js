@@ -57,3 +57,7 @@ export const validateLessonModal = (title, description) => {
   }
   return errors;
 };
+
+export const totalPages = (total, maxView) => {
+  return Math.floor(total / maxView) + 1;
+};

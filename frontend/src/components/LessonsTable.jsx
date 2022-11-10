@@ -2,7 +2,8 @@ import { Table, Pagination, Button, Icon } from "semantic-ui-react";
 import { useEffect, useState } from "react";
 import { connect, useDispatch } from "react-redux";
 import { fetchLessons } from "../actions";
-
+import { totalPages } from "../utils";
+import { viewLessonsRows } from "../utils/constant";
 const LessonsTable = ({ lessons }) => {
   const dispatch = useDispatch();
   const [activePage, setActivePage] = useState(1);
@@ -81,7 +82,7 @@ const LessonsTable = ({ lessons }) => {
           activePage={activePage}
           pointing
           secondary
-          totalPages={Math.floor(lessons.totalLessons / 10) + 1 || 1}
+          totalPages={totalPages(lessons.totalLessons, viewLessonsRows)}
           onPageChange={paginationHandler}
         />
       </div>

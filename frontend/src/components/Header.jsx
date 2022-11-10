@@ -15,6 +15,7 @@ const Header = ({ user = {} }) => {
     <Menu
       inverted
       size="large"
+      className="Header"
     >
       <Menu.Item
         as={Link}
@@ -27,6 +28,12 @@ const Header = ({ user = {} }) => {
           <Menu.Item
             as={Link}
             to="/admin/lessons"
+          >
+            Admin-Lessons
+          </Menu.Item>
+          <Menu.Item
+            as={Link}
+            to="/lessons"
           >
             Lessons
           </Menu.Item>

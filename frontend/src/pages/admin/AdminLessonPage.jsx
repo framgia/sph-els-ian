@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Button } from "semantic-ui-react";
-import AddWordModal from "../components/Modals/AddWordModal.jsx";
-import WordsTable from "../components/WordsTable";
+import AddWordModal from "../../components/Modals/AddWordModal.jsx";
+import WordsTable from "../../components/WordsTable";
 import { Link } from "react-router-dom";
-const LessonPage = () => {
+const AdminLessonPage = (props) => {
   const [modal, setModal] = useState(false);
 
   return (
@@ -43,4 +43,4 @@ const LessonPage = () => {
   );
 };
 
-export default LessonPage;
+export default AdminLessonPage;

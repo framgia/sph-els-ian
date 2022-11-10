@@ -1,8 +1,10 @@
+import { Header } from "semantic-ui-react";
+
 const Footer = () => {
   return (
-    <div className="ui vertical footer segment">
-      <div className="ui container">
-        <p>Footer</p>
+    <div className="ui inverted vertical footer segment">
+      <div className="ui center aligned container">
+        <Header className="inverted">Footer </Header>
       </div>
     </div>
   );

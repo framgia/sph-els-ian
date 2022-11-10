@@ -1,8 +1,8 @@
 import { useState } from "react";
-import LessonsTable from "../components/LessonsTable";
+import LessonsTable from "../../components/LessonsTable";
 import { Button } from "semantic-ui-react";
-import AddLessonModal from "../components/Modals/AddLessonModal";
-const LessonListPage = () => {
+import AddLessonModal from "../../components/Modals/AddLessonModal";
+const AdminLessonListPage = () => {
   const [modal, setModal] = useState(false);
   return (
     <div className="LessonPage">
@@ -29,4 +29,4 @@ const LessonListPage = () => {
   );
 };
 
-export default LessonListPage;
+export default AdminLessonListPage;

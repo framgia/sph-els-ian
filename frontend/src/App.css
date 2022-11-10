@@ -46,7 +46,7 @@
 }
 
 span {
-  height: 3em;
+  max-height: 3em;
   display: inline-block;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -54,4 +54,25 @@ span {
 
 .WordsTable > thead > tr > th {
   background-color: #b3ffff !important;
+}
+
+span.lesson {
+  max-height: 10em;
+  display: inline-block;
+  /* overflow: ellipsis; */
+  text-overflow: "see more";
+}
+
+/* .ui.card.lesson {
+  max-height: 11em !important;
+} */
+
+.Header.ui.menu {
+  padding-top: 1em;
+  padding-bottom: 1em;
+  margin-bottom: 5vh;
+}
+
+.ui.footer.segment {
+  margin-top: 5vh;
 }

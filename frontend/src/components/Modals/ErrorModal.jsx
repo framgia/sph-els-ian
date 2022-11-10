@@ -1,19 +1,19 @@
 import { Modal, Button } from "semantic-ui-react";
-const ErrorModal = (props) => {
+const ErrorModal = ({ modal, modalMsg, setModal }) => {
   return (
     <Modal
       centered={true}
-      open={props.modal}
-      onClose={() => props.setModal(false)}
+      open={modal}
+      onClose={() => setModal(false)}
     >
-      <Modal.Header>{props.modalMsg.header}</Modal.Header>
+      <Modal.Header>{modalMsg.header}</Modal.Header>
       <Modal.Content>
-        <Modal.Description>{props.modalMsg.description}</Modal.Description>
+        <Modal.Description>{modalMsg.description}</Modal.Description>
       </Modal.Content>
       <Modal.Actions>
         <Button
           content="Close"
-          onClick={() => props.setModal(false)}
+          onClick={() => setModal(false)}
           negative
         />
       </Modal.Actions>

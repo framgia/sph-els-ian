@@ -1,5 +1,5 @@
 import LoginForm from "../components/Forms/LoginForm";
-import ErrorModal from "../components/ErrorModal";
+import ErrorModal from "../components/Modals/ErrorModal";
 import { useState } from "react";
 const Login = () => {
   const [modal, setModal] = useState(false);

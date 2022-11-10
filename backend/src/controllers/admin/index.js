@@ -47,10 +47,10 @@ const viewLessons = asyncHandler(async (req, res) => {
 
 const addWord = asyncHandler(async (req, res) => {
   //check payload
-  const { lessonId, new_word, choices = [] } = req.body;
+  const { lesson_id, new_word, choices = [] } = req.body;
 
   //error if missing
-  if (!lessonId) {
+  if (!lesson_id) {
     res.status(400);
     throw new Error("Missing Lesson ID");
   }
@@ -71,7 +71,7 @@ const addWord = asyncHandler(async (req, res) => {
   }
 
   //check if lesson exists
-  let lesson = await Lesson.findOne({ where: { id: lessonId } });
+  let lesson = await Lesson.findOne({ where: { id: lesson_id } });
   if (lesson === undefined) {
     res.status(400);
     throw new Error("Lesson does not exist");
@@ -79,7 +79,7 @@ const addWord = asyncHandler(async (req, res) => {
 
   //check if word exists on lesson
   let word = await Word.findOne({
-    where: { lesson_id: lessonId, jp_word: new_word },
+    where: { lesson_id: lesson_id, jp_word: new_word },
   });
   if (word != undefined) {
     res.status(400);
@@ -88,7 +88,7 @@ const addWord = asyncHandler(async (req, res) => {
 
   //insert new word
   word = await Word.create({
-    lesson_id: lessonId,
+    lesson_id: lesson_id,
     jp_word: new_word,
   });
 
@@ -107,4 +107,42 @@ const addWord = asyncHandler(async (req, res) => {
   res.status(200).json(`Successfully added ${new_word}`);
 });
 
-module.exports = { addLesson, viewLessons, addWord };
+const viewLessonWords = asyncHandler(async (req, res) => {
+  //check payload
+  const { lesson_id } = req.body;
+  let offset = req.params.offset || 0;
+
+  //check if offset is valid
+  if (isNaN(offset) || offset < 0) {
+    offset = 0;
+  }
+
+  //error if missing
+  if (!lesson_id) {
+    res.status(400);
+    throw new Error("Missing Lesson ID");
+  }
+
+  //Check if Lesson exists
+  let lesson = await Lesson.findOne({ where: { id: lesson_id } });
+  if (lesson === undefined) {
+    res.status(400);
+    throw new Error("Lesson does not exist");
+  }
+
+  //Find Words and Choice
+  let words = await Word.findAll({
+    attributes: ["id", "jp_word", "lesson_id"],
+    where: { lesson_id: lesson_id },
+    limit: DB_LIMIT,
+    offset: offset * DB_LIMIT,
+    include: { model: Choice, attributes: ["id", "word", "isCorrect"] },
+  });
+
+  let lesson_word_count = await Word.count({
+    where: { lesson_id },
+  });
+
+  res.status(200).json({ data: words, totalWords: lesson_word_count });
+});
+module.exports = { addLesson, viewLessons, addWord, viewLessonWords };

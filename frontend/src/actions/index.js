@@ -11,7 +11,16 @@ export const setUser = (user) => {
     payload: user,
   };
 };
-export const fetchLessons =
+
+export const removeUser = () => {
+  window.localStorage.removeItem("data");
+  window.localStorage.removeItem("accessToken");
+  return {
+    type: "REMOVE_USER",
+  };
+};
+
+export const fetchLessonsAdmin =
   (offset = 0) =>
   async (dispatch, getState) => {
     const lessons = await server.get(`/api/admin/viewLessons/${offset}`);

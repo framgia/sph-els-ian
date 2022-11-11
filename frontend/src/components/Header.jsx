@@ -1,16 +1,8 @@
 import { Link } from "react-router-dom";
-import { Menu } from "semantic-ui-react";
+import { Button, Menu } from "semantic-ui-react";
 import { connect } from "react-redux";
-import { useState, useEffect } from "react";
-const Header = ({ user = {} }) => {
-  const [hasUser, setHasUser] = useState(false);
-  useEffect(() => {
-    if (Object.keys(user).length === 0) {
-      setHasUser(false);
-    } else {
-      setHasUser(true);
-    }
-  }, [user]);
+import { removeUser } from "../actions";
+const Header = ({ hasUser, removeUser }) => {
   return (
     <Menu
       inverted
@@ -37,6 +29,7 @@ const Header = ({ user = {} }) => {
           >
             Lessons
           </Menu.Item>
+          <Menu.Item onClick={() => removeUser()}>Logout</Menu.Item>
         </Menu.Menu>
       ) : (
         <Menu.Menu position="right">
@@ -57,7 +50,5 @@ const Header = ({ user = {} }) => {
     </Menu>
   );
 };
-const mapStateToProps = (state) => {
-  return { user: state.user };
-};
-export default connect(mapStateToProps, {})(Header);
+
+export default connect(null, { removeUser })(Header);

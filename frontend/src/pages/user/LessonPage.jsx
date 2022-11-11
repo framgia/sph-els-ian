@@ -58,7 +58,6 @@ const LessonPage = ({ lesson }) => {
             <Card.Group itemsPerRow={5}>
               {lesson.words &&
                 lesson.words.map((word) => {
-                  console.log(word);
                   return (
                     <Card
                       key={word.id}

@@ -1,25 +1,30 @@
 import Header from "./Header";
 import { Outlet } from "react-router-dom";
 import Footer from "./Footer";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { setUser } from "../actions";
-import { useDispatch } from "react-redux";
-const Layout = () => {
-  const dispatch = useDispatch();
+import { connect } from "react-redux";
+const Layout = ({ user, setUser }) => {
+  const [hasUser, setHasUser] = useState(false);
   useEffect(() => {
     let local_user = window.localStorage.getItem("data");
-    console.log(local_user);
-    if (!local_user) {
+    if (local_user == null) {
+      setHasUser(false);
     } else {
-      dispatch(setUser(local_user));
+      setUser(local_user);
+      setHasUser(true);
     }
-  }, []);
+  }, [user]);
+
   return (
     <div className="Layout">
-      <Header />
+      <Header hasUser={hasUser} />
       <Outlet />
       <Footer />
     </div>
   );
 };
-export default Layout;
+const mapStateToProps = (state) => {
+  return { user: state.user };
+};
+export default connect(mapStateToProps, { setUser })(Layout);

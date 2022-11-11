@@ -44,7 +44,6 @@ const WordsTable = ({ words }) => {
         <Table.Body>
           {words.data &&
             words.data.map((word) => {
-              console.log(word.id);
               return (
                 <Table.Row
                   key={word.id}

@@ -1,21 +1,22 @@
 import { Table, Pagination, Button, Icon } from "semantic-ui-react";
 import { useEffect, useState } from "react";
 import { connect, useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
-import { fetchLessons } from "../actions";
+import { useParams } from "react-router-dom";
+import { fetchWords } from "../actions";
 import { totalPages } from "../utils";
-import { viewLessonsRows } from "../utils/constant";
-const LessonsTable = ({ lessons }) => {
+import { viewWordsRows } from "../utils/constant";
+const WordsTable = ({ words }) => {
+  let { lesson_id } = useParams();
   const dispatch = useDispatch();
   const [activePage, setActivePage] = useState(1);
   const paginationHandler = (e, { activePage }) => {
     e.preventDefault();
     setActivePage(activePage);
-    dispatch(fetchLessons(activePage - 1));
+    dispatch(fetchWords(activePage - 1, lesson_id));
   };
 
   useEffect(() => {
-    dispatch(fetchLessons(activePage - 1));
+    dispatch(fetchWords(activePage - 1, lesson_id));
   }, []);
 
   return (
@@ -23,46 +24,49 @@ const LessonsTable = ({ lessons }) => {
       <Table
         fixed
         celled
-        structured
         color="black"
+        striped
+        className="WordsTable"
       >
         <Table.Header>
-          <Table.Row>
+          <Table.Row textAlign="center">
+            <Table.HeaderCell width={2}>Word</Table.HeaderCell>
+            <Table.HeaderCell width={2}>Answer</Table.HeaderCell>
             <Table.HeaderCell
-              className="table row"
-              width={3}
+              colSpan={3}
+              width={6}
             >
-              Title
+              Extra Choices
             </Table.HeaderCell>
-            <Table.HeaderCell
-              className="table row"
-              width={7}
-            >
-              Description
-            </Table.HeaderCell>
-            <Table.HeaderCell
-              className="table row"
-              width={2}
-            >
-              Actions
-            </Table.HeaderCell>
+            <Table.HeaderCell width={2}>Options</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {lessons.data &&
-            lessons.data.map((lesson) => {
+          {words.data &&
+            words.data.map((word) => {
+              console.log(word.id);
               return (
-                <Table.Row key={lesson.id}>
-                  <Table.Cell className="table row">
-                    <Link to={`${lesson.id}`}>
-                      <span>{lesson.title}</span>
-                    </Link>
+                <Table.Row
+                  key={word.id}
+                  textAlign="center"
+                >
+                  <Table.Cell width={2}>
+                    <span>
+                      <h1 className="ui header">{word.jp_word}</h1>
+                    </span>
                   </Table.Cell>
-                  <Table.Cell className="table row">
-                    <span>{lesson.description}</span>
-                  </Table.Cell>
+                  {[...Array(4).keys()].map((index) => {
+                    return (
+                      <Table.Cell
+                        width={2}
+                        key={`${word.id} ${index}`}
+                      >
+                        <span>{word.Choices[index].word}</span>
+                      </Table.Cell>
+                    );
+                  })}
                   <Table.Cell
-                    className="table row"
+                    width={2}
                     textAlign="right"
                   >
                     <Button className="negative">
@@ -86,7 +90,7 @@ const LessonsTable = ({ lessons }) => {
           activePage={activePage}
           pointing
           secondary
-          totalPages={totalPages(lessons.totalLessons, viewLessonsRows) || 1}
+          totalPages={totalPages(words.totalWords, viewWordsRows) || 1}
           onPageChange={paginationHandler}
         />
       </div>
@@ -95,6 +99,6 @@ const LessonsTable = ({ lessons }) => {
 };
 
 const mapStateToProps = (state) => {
-  return { lessons: state.lessons, totalLessons: state.totalLessons };
+  return { words: state.words };
 };
-export default connect(mapStateToProps, null)(LessonsTable);
+export default connect(mapStateToProps, null)(WordsTable);

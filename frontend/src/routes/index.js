@@ -8,6 +8,7 @@ import Layout from "../components/Layout";
 import ProtectedRoutes from "../components/ProtectedRoutes";
 import Dashboard from "../pages/Dashboard";
 import LessonListPage from "../pages/LessonListPage";
+import LessonPage from "../pages/LessonPage";
 const RouteList = () => {
   return (
     <BrowserRouter>
@@ -37,6 +38,10 @@ const RouteList = () => {
           <Route
             path="admin/lessons"
             element={<LessonListPage />}
+          />
+          <Route
+            path="admin/lessons/:lesson_id"
+            element={<LessonPage />}
           />
           <Route
             path="*"

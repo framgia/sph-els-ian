@@ -25,7 +25,6 @@ const AddWordModal = ({ modal, setModal }) => {
     e.preventDefault();
     let sample = validateWordModal(newWord, choice0, choice1, choice2, choice3);
     setErrors(sample);
-    console.log(sample);
     if (Object.values(sample).every((value) => value === "")) {
       apiCall();
     }

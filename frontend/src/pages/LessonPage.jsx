@@ -3,7 +3,7 @@ import { Button } from "semantic-ui-react";
 import AddWordModal from "../components/Modals/AddWordModal.jsx";
 import WordsTable from "../components/WordsTable";
 import { Link } from "react-router-dom";
-const LessonPage = (props) => {
+const LessonPage = () => {
   const [modal, setModal] = useState(false);
 
   return (

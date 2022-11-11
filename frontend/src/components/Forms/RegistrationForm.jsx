@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Form } from "semantic-ui-react";
 import server from "../../api/server";
 import { validateRegistrationForm } from "../../utils";
-const RegistrationForm = (props) => {
+const RegistrationForm = ({ setModal, setModalMsg }) => {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -31,17 +31,17 @@ const RegistrationForm = (props) => {
       })
       .catch((error) => {
         if (error.code === "ERR_NETWORK") {
-          props.setModalMsg({
+          setModalMsg({
             header: "503",
             description: "Server Unavailable",
           });
-          props.setModal(true);
+          setModal(true);
         } else {
-          props.setModalMsg({
+          setModalMsg({
             header: error.response.statusText,
             description: error.response.data.message,
           });
-          props.setModal(true);
+          setModal(true);
         }
       });
   };

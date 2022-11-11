@@ -86,7 +86,7 @@ const LessonsTable = ({ lessons }) => {
           activePage={activePage}
           pointing
           secondary
-          totalPages={totalPages(lessons.totalLessons, viewLessonsRows)}
+          totalPages={totalPages(lessons.totalLessons, viewLessonsRows) || 1}
           onPageChange={paginationHandler}
         />
       </div>

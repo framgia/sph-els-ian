@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 import { connect, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { fetchWords } from "../actions";
-
+import { totalPages } from "../utils";
+import { viewWordsRows } from "../utils/constant";
 const WordsTable = ({ words }) => {
   let { lesson_id } = useParams();
   const dispatch = useDispatch();
@@ -43,6 +44,7 @@ const WordsTable = ({ words }) => {
         <Table.Body>
           {words.data &&
             words.data.map((word) => {
+              console.log(word.id);
               return (
                 <Table.Row
                   key={word.id}
@@ -53,18 +55,16 @@ const WordsTable = ({ words }) => {
                       <h1 className="ui header">{word.jp_word}</h1>
                     </span>
                   </Table.Cell>
-                  <Table.Cell width={2}>
-                    <span>{word.Choices[0].word}</span>
-                  </Table.Cell>
-                  <Table.Cell width={2}>
-                    <span>{word.Choices[1].word}</span>
-                  </Table.Cell>
-                  <Table.Cell width={2}>
-                    <span>{word.Choices[2].word}</span>
-                  </Table.Cell>
-                  <Table.Cell width={2}>
-                    <span>{word.Choices[3].word}</span>
-                  </Table.Cell>
+                  {[...Array(4).keys()].map((index) => {
+                    return (
+                      <Table.Cell
+                        width={2}
+                        key={`${word.id} ${index}`}
+                      >
+                        <span>{word.Choices[index].word}</span>
+                      </Table.Cell>
+                    );
+                  })}
                   <Table.Cell
                     width={2}
                     textAlign="right"
@@ -90,7 +90,7 @@ const WordsTable = ({ words }) => {
           activePage={activePage}
           pointing
           secondary
-          totalPages={Math.floor(words.totalWords / 10) + 1 || 1}
+          totalPages={totalPages(words.totalWords, viewWordsRows) || 1}
           onPageChange={paginationHandler}
         />
       </div>

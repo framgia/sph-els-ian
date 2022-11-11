@@ -28,7 +28,7 @@ const LessonPage = (props) => {
               color="green"
               className="ui right floated"
               style={{ marginBottom: 5 }}
-              //   onClick={() => setModal(true)}
+              //TODO   onClick={() => setModal(true)}
             >
               Add New Word
             </Button>
@@ -36,7 +36,7 @@ const LessonPage = (props) => {
           </div>
         </div>
       </div>
-      {/* <AddLessonModal
+      {/*TODO <AddLessonModal
         modal={modal}
         setModal={setModal}
       /> */}

@@ -6,7 +6,7 @@ const Register = () => {
   const [modal, setModal] = useState(false);
   const [modalMsg, setModalMsg] = useState({ header: "", description: "" });
   return (
-    <div className="Register ui middle aligned center aligned grid">
+    <div className="Register Outlet ui middle aligned center aligned grid">
       <div className="column four wide">
         <h2>Registration</h2>
         <RegistrationForm

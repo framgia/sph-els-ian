@@ -75,3 +75,16 @@ export const fetchWords =
       payload: payload,
     });
   };
+
+export const fetchQuiz = (lesson_id) => async (dispatch, getState) => {
+  const { data } = await server.post("/user/getQuiz", {
+    lesson_id,
+  });
+  let payload = {
+    words: data.words,
+  };
+  dispatch({
+    type: "FETCH_QUIZ",
+    payload: payload,
+  });
+};

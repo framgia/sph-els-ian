@@ -89,7 +89,7 @@ const WordsTable = ({ words }) => {
           activePage={activePage}
           pointing
           secondary
-          totalPages={totalPages(words.totalWords, viewWordsRows) || 1}
+          totalPages={totalPages(words.totalWords, viewWordsRows)}
           onPageChange={paginationHandler}
         />
       </div>

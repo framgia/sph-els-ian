@@ -103,5 +103,5 @@ export const validateWordModal = (
 };
 
 export const totalPages = (total, maxView) => {
-  return Math.floor(total / maxView) + 1 || 1;
+  return Math.ceil(total / maxView) || 1;
 };

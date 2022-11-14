@@ -75,22 +75,24 @@ const AddWordModal = ({ modal, setModal }) => {
     e.preventDefault(e);
     setNewWord(e.target.value);
   };
-
-  const handleChoice0 = (e) => {
+  const handleChoice = (e) => {
     e.preventDefault();
-    setChoice0(e.target.value);
-  };
-  const handleChoice1 = (e) => {
-    e.preventDefault();
-    setChoice1(e.target.value);
-  };
-  const handleChoice2 = (e) => {
-    e.preventDefault();
-    setChoice2(e.target.value);
-  };
-  const handleChoice3 = (e) => {
-    e.preventDefault();
-    setChoice3(e.target.value);
+    switch (e.target.name) {
+      case "choice0":
+        setChoice0(e.target.value);
+        return;
+      case "choice1":
+        setChoice1(e.target.value);
+        return;
+      case "choice2":
+        setChoice2(e.target.value);
+        return;
+      case "choice3":
+        setChoice3(e.target.value);
+        return;
+      default:
+        return;
+    }
   };
 
   return (
@@ -129,8 +131,9 @@ const AddWordModal = ({ modal, setModal }) => {
                 size="large"
                 type="text"
                 placeholder="Answer"
+                name="choice0"
                 value={choice0}
-                onChange={(e) => handleChoice0(e)}
+                onChange={(e) => handleChoice(e)}
                 error={
                   errors.choice0
                     ? { content: errors.choice0, pointing: "left" }
@@ -141,8 +144,9 @@ const AddWordModal = ({ modal, setModal }) => {
                 size="large"
                 type="text"
                 placeholder="Answer"
+                name="choice1"
                 value={choice1}
-                onChange={(e) => handleChoice1(e)}
+                onChange={(e) => handleChoice(e)}
                 error={
                   errors.choice1
                     ? { content: errors.choice1, pointing: "left" }
@@ -153,8 +157,9 @@ const AddWordModal = ({ modal, setModal }) => {
                 size="large"
                 type="text"
                 placeholder="Answer"
+                name="choice2"
                 value={choice2}
-                onChange={(e) => handleChoice2(e)}
+                onChange={(e) => handleChoice(e)}
                 error={
                   errors.choice2
                     ? { content: errors.choice2, pointing: "left" }
@@ -165,8 +170,9 @@ const AddWordModal = ({ modal, setModal }) => {
                 size="large"
                 type="text"
                 placeholder="Answer"
+                name="choice3"
                 value={choice3}
-                onChange={(e) => handleChoice3(e)}
+                onChange={(e) => handleChoice(e)}
                 error={
                   errors.choice3
                     ? { content: errors.choice3, pointing: "left" }

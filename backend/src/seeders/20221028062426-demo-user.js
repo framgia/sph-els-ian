@@ -14,7 +14,35 @@ module.exports = {
      */
     return queryInterface.bulkInsert("Users", [
       {
-        username: "John",
+        username: "12",
+        password: await generateHash("1234"),
+        avatar: "ehhhhhh",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        username: "ian",
+        password: await generateHash("1234"),
+        avatar: "ehhhhhh",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        username: "dave",
+        password: await generateHash("1234"),
+        avatar: "ehhhhhh",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        username: "art",
+        password: await generateHash("1234"),
+        avatar: "ehhhhhh",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        username: "mark",
         password: await generateHash("1234"),
         avatar: "ehhhhhh",
         createdAt: new Date(),

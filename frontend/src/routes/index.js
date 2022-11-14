@@ -41,10 +41,6 @@ const RouteList = () => {
               element={<LessonCardsPage />}
             />
             <Route
-              path="lessons/notfound"
-              element={<PageNotFound />}
-            />
-            <Route
               path="lessons/:lesson_id"
               element={<LessonPage />}
             />

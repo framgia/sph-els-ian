@@ -7,8 +7,10 @@ import PageNotFound from "../pages/PageNotFound";
 import Layout from "../components/Layout";
 import ProtectedRoutes from "../components/ProtectedRoutes";
 import Dashboard from "../pages/Dashboard";
-import LessonListPage from "../pages/LessonListPage";
-import LessonPage from "../pages/LessonPage";
+import AdminLessonListPage from "../pages/admin/AdminLessonListPage";
+import AdminLessonPage from "../pages/admin/AdminLessonPage";
+import LessonCardsPage from "../pages/user/LessonCardsPage";
+import LessonPage from "../pages/user/LessonPage";
 const RouteList = () => {
   return (
     <BrowserRouter>
@@ -34,15 +36,23 @@ const RouteList = () => {
               path="dashboard"
               element={<Dashboard />}
             />
+            <Route
+              path="lessons"
+              element={<LessonCardsPage />}
+            />
+            <Route
+              path="lessons/:lesson_id"
+              element={<LessonPage />}
+            />
+            <Route
+              path="admin/lessons"
+              element={<AdminLessonListPage />}
+            />
+            <Route
+              path="admin/lessons/:lesson_id"
+              element={<AdminLessonPage />}
+            />
           </Route>
-          <Route
-            path="admin/lessons"
-            element={<LessonListPage />}
-          />
-          <Route
-            path="admin/lessons/:lesson_id"
-            element={<LessonPage />}
-          />
           <Route
             path="*"
             element={<PageNotFound />}

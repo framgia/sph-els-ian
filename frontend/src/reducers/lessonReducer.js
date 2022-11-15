@@ -1,10 +1,10 @@
 const initial_state = {
-  offset: -1,
-  data: [],
+  data: {},
+  words: [],
 };
 export const lessonReducer = (state = initial_state, action) => {
   switch (action.type) {
-    case "FETCH_LESSONS":
+    case "FETCH_LESSON":
       return action.payload;
     default:
       return state;

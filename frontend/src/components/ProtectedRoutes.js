@@ -1,6 +1,20 @@
 import { Outlet, Navigate } from "react-router-dom";
-const ProtectedRoutes = () => {
-  let data = window.localStorage.getItem("data");
-  return data ? <Outlet /> : <Navigate to="/login" />;
+import { setUser } from "../actions";
+import { useState, useEffect } from "react";
+import { connect } from "react-redux";
+const ProtectedRoutes = ({ user }) => {
+  const [hasUser, setHasUser] = useState(true);
+  useEffect(() => {
+    if (Object.keys(user).length === 0) {
+      setHasUser(false);
+    } else {
+      setHasUser(true);
+    }
+  }, [user]);
+
+  return hasUser ? <Outlet /> : <Navigate to="/login" />;
 };
-export default ProtectedRoutes;
+const mapStateToProps = (state) => {
+  return { user: state.user };
+};
+export default connect(mapStateToProps, null)(ProtectedRoutes);

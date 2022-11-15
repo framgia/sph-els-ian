@@ -2,10 +2,11 @@ import { Outlet, Navigate } from "react-router-dom";
 import { setUser } from "../actions";
 import { useState, useEffect } from "react";
 import { connect } from "react-redux";
+import { isEmpty } from "../utils";
 const ProtectedRoutes = ({ user }) => {
   const [hasUser, setHasUser] = useState(true);
   useEffect(() => {
-    if (Object.keys(user).length === 0) {
+    if (isEmpty(user)) {
       setHasUser(false);
     } else {
       setHasUser(true);

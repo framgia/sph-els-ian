@@ -90,3 +90,13 @@ export const fetchQuiz = (lessonId) => async (dispatch, getState) => {
     payload: payload,
   });
 };
+
+export const fetchResult = (lesson_id) => async (dispatch, getState) => {
+  const response = await server.get(`/user/results/${lesson_id}`);
+  let { data } = response;
+  console.log(response);
+  dispatch({
+    type: "FETCH_RESULT",
+    payload: data,
+  });
+};

@@ -55,6 +55,14 @@ const viewLesson = asyncHandler(async (req, res) => {
     where: { id: lesson_id },
   });
 
+<<<<<<< HEAD
+=======
+  if (lesson === null) {
+    res.status(403);
+    throw new Error("Lesson does not exist.");
+  }
+  //get sample words
+>>>>>>> a311f43... [SELS-Feature][FE] Results Page
   let words = await Word.findAll({
     attributes: ["id", "jp_word", "lesson_id"],
     where: { lesson_id: lesson_id },
@@ -197,7 +205,22 @@ const showResults = asyncHandler(async (req, res) => {
     throw new Error("Invalid lesson_id");
   }
   //get quiz results via lesson_id, user_id
-  let quiz = await Quiz.findOne({ where: { lesson_id, user_id: req.user_id } });
+  let quiz = await Quiz.findOne({
+    where: { lesson_id, user_id: req.user_id },
+    include: [
+      {
+        model: Lesson,
+        attributes: ["title"],
+      },
+    ],
+    raw: true,
+  });
+
+  //throw error if not found
+  if (quiz === null) {
+    res.status(403);
+    throw new Error("User has not taken the Quiz.");
+  }
 
   //get quiz items via quiz_id
   let quiz_items = await QuizItem.findAll({
@@ -207,11 +230,17 @@ const showResults = asyncHandler(async (req, res) => {
       {
         model: Word,
         attributes: ["jp_word"],
+        include: [
+          {
+            model: Choice,
+            attributes: [["word", "answer"]],
+            where: { isCorrect: true },
+          },
+        ],
       },
     ],
     raw: true,
   });
-
   //return quiz and quiz items
   res.status(200).json({ quiz, quiz_items });
 });

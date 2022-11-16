@@ -309,6 +309,41 @@ const showUser = asyncHandler(async (req, res) => {
     words_learned,
   });
 });
+const showDashboardLessons = asyncHandler(async (req, res) => {
+  //set Offset
+  let offset = req.params.offset || 0;
+  if (isNaN(offset) || offset < 0) {
+    offset = 0;
+  }
+  let [totalQuizzes, quizzes] = await Promise.all([
+    //total quizzes
+    Quiz.count({
+      where: { user_id: req.user_id },
+    }),
+    //quizzes
+    Quiz.findAll({
+      where: { user_id: req.user_id },
+      attributes: [
+        "id",
+        "score",
+        [sequelize.col("Lesson.title"), "title"],
+        [sequelize.col("Lesson.id"), "lessonId"],
+      ],
+      include: {
+        model: Lesson,
+        attributes: [],
+      },
+      limit: DB_LIMIT,
+      offset: offset * DB_LIMIT,
+      raw: true,
+    }),
+  ]);
+
+  //return empty if null
+  res
+    .status(200)
+    .json({ quizzes: quizzes || [], totalQuizzes: totalQuizzes || 0 });
+});
 
 const changeUserPassword = asyncHandler(async (req, res) => {
   //check payload
@@ -512,4 +547,5 @@ module.exports = {
   changeUserAvatar,
   fetchUserAvatar,
   showDashboardWords,
+  showDashboardLessons,
 };

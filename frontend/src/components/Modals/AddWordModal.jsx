@@ -7,7 +7,7 @@ import { validateWordModal } from "../../utils";
 import { fetchWords } from "../../actions";
 
 const AddWordModal = ({ modal, setModal, offset }) => {
-  let { lesson_id } = useParams();
+  let { lessonId } = useParams();
   const dispatch = useDispatch();
   const initialFormState = {
     newWord: "",
@@ -38,14 +38,14 @@ const AddWordModal = ({ modal, setModal, offset }) => {
     setIsLoading(true);
     server
       .post("/api/admin/addWord", {
-        lesson_id,
+        lesson_id: lessonId,
         new_word: newWord,
         choices: [choice0, choice1, choice2, choice3],
       })
       .then((response) => {
         setIsLoading(false);
         cancelModal();
-        dispatch(fetchWords(offset, lesson_id));
+        dispatch(fetchWords(offset, lessonId));
       })
       .catch((error) => {
         setIsLoading(false);

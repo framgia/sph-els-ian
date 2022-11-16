@@ -43,11 +43,11 @@ const RouteList = () => {
               element={<LessonCardsPage />}
             />
             <Route
-              path="lessons/:lesson_id"
+              path="lessons/:lessonId"
               element={<LessonPage />}
             />
             <Route
-              path="quiz/:lesson_id"
+              path="quiz/:lessonId"
               element={<QuizPage />}
             />
             {/* Admin Routes */}
@@ -56,7 +56,7 @@ const RouteList = () => {
               element={<AdminLessonListPage />}
             />
             <Route
-              path="admin/lessons/:lesson_id"
+              path="admin/lessons/:lessonId"
               element={<AdminLessonPage />}
             />
           </Route>

@@ -7,11 +7,11 @@ import { connect } from "react-redux";
 const Layout = ({ user, setUser }) => {
   const [hasUser, setHasUser] = useState(false);
   useEffect(() => {
-    let local_user = window.localStorage.getItem("data");
-    if (local_user == null) {
+    let localUser = window.localStorage.getItem("data");
+    if (localUser == null) {
       setHasUser(false);
     } else {
-      setUser(local_user);
+      setUser(localUser);
       setHasUser(true);
     }
   }, [user]);

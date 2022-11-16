@@ -6,10 +6,10 @@ import { Button, Header, Loader, Progress } from "semantic-ui-react";
 const QuizPage = ({ quiz, fetchQuiz }) => {
   const [currentItem, setCurrentItem] = useState(1);
   const [answers, setAnswers] = useState({});
-  const { lesson_id } = useParams();
+  const { lessonId } = useParams();
 
   useEffect(() => {
-    fetchQuiz(lesson_id);
+    fetchQuiz(lessonId);
   }, []);
 
   useEffect(() => {
@@ -20,10 +20,10 @@ const QuizPage = ({ quiz, fetchQuiz }) => {
     }
   }, [currentItem]);
 
-  const Answer = (item, choice_id) => {
-    let new_answers = answers;
-    new_answers[item] = choice_id;
-    setAnswers(new_answers);
+  const Answer = (item, choiceId) => {
+    let newAnswers = answers;
+    newAnswers[item] = choiceId;
+    setAnswers(newAnswers);
     setCurrentItem(currentItem + 1);
   };
 

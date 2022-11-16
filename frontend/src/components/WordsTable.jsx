@@ -6,17 +6,17 @@ import { fetchWords } from "../actions";
 import { totalPages } from "../utils";
 import { viewWordsRows } from "../utils/constant";
 const WordsTable = ({ words }) => {
-  let { lesson_id } = useParams();
+  let { lessonId } = useParams();
   const dispatch = useDispatch();
   const [activePage, setActivePage] = useState(1);
   const paginationHandler = (e, { activePage }) => {
     e.preventDefault();
     setActivePage(activePage);
-    dispatch(fetchWords(activePage - 1, lesson_id));
+    dispatch(fetchWords(activePage - 1, lessonId));
   };
 
   useEffect(() => {
-    dispatch(fetchWords(activePage - 1, lesson_id));
+    dispatch(fetchWords(activePage - 1, lessonId));
   }, []);
 
   return (

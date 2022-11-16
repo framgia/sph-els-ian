@@ -1,7 +1,7 @@
-const initial_state = {
+const initialState = {
   words: [],
 };
-export const quizReducer = (state = initial_state, action) => {
+export const quizReducer = (state = initialState, action) => {
   switch (action.type) {
     case "FETCH_QUIZ":
       return action.payload;

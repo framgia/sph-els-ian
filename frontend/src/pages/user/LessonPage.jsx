@@ -5,11 +5,11 @@ import { connect, useDispatch } from "react-redux";
 import { fetchLesson } from "../../actions";
 
 const LessonPage = ({ lesson }) => {
-  let { lesson_id } = useParams();
+  let { lessonId } = useParams();
   let [hasLesson, setHasLesson] = useState(false);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(fetchLesson(lesson_id));
+    dispatch(fetchLesson(lessonId));
   }, []);
 
   useEffect(() => {
@@ -59,7 +59,7 @@ const LessonPage = ({ lesson }) => {
               color="green"
               disabled={lesson.hasTaken}
               as={Link}
-              to={`/quiz/${lesson_id}`}
+              to={`/quiz/${lessonId}`}
             >
               Start Quiz
             </Button>

@@ -1,7 +1,7 @@
 export const validateRegistrationForm = (
   username,
   password,
-  c_password = "",
+  cPassword = "",
   errors
 ) => {
   if (username === "") {
@@ -14,12 +14,12 @@ export const validateRegistrationForm = (
   } else {
     errors = { ...errors, noPassword: false };
   }
-  if (c_password === "") {
-    errors = { ...errors, noC_password: true };
+  if (cPassword === "") {
+    errors = { ...errors, noCPassword: true };
   } else {
-    errors = { ...errors, noC_password: false };
+    errors = { ...errors, noCPassword: false };
   }
-  if (password === c_password && password !== "") {
+  if (password === cPassword && password !== "") {
     errors = { ...errors, cPassError: false };
   } else {
     errors = { ...errors, cPassError: true };

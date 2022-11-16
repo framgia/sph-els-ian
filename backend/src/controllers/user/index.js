@@ -12,6 +12,7 @@ const {
 } = require("../../models");
 const { DB_LIMIT } = require("../../utils/constant");
 const { shuffleArray } = require("../../utils/");
+const { response } = require("express");
 
 const viewLessons = asyncHandler(async (req, res) => {
   //set Offset
@@ -264,4 +265,46 @@ const showResults = asyncHandler(async (req, res) => {
   res.status(200).json({ quiz, quiz_items });
 });
 
-module.exports = { viewLesson, viewLessons, getQuiz, submitQuiz, showResults };
+const showUser = asyncHandler(async (req, res) => {
+  //find User
+  const user = await User.findOne({
+    where: { id: req.user_id },
+    attributes: ["username", "avatar", "isAdmin"],
+  });
+
+  //find Quizzes and Sum of Score
+  let complete_lessons = 0;
+  let words_learned = 0;
+  const quizzes = await Quiz.findAll({
+    attributes: [
+      [sequelize.fn("sum", sequelize.col("score")), "score"],
+      [sequelize.fn("count", sequelize.col("lesson_id")), "lessons"],
+    ],
+    where: { id: req.user_id },
+    group: ["user_id"],
+    raw: true,
+  }).then((response) => {
+    if (response.length !== 0) {
+      complete_lessons = response[0].lessons;
+      words_learned = response[0].score;
+    }
+  });
+
+  //find Followers and following
+
+  //generate response
+  res.status(200).json({
+    user,
+    complete_lessons,
+    words_learned,
+  });
+});
+
+module.exports = {
+  viewLesson,
+  viewLessons,
+  getQuiz,
+  submitQuiz,
+  showResults,
+  showUser,
+};

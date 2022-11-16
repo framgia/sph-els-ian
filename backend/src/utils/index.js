@@ -27,7 +27,6 @@ const validatePassword = async (password, db_password) => {
   return await bcrypt.compare(password, db_password);
 };
 
-//https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
 const shuffleArray = (array) => {
   let currentIndex = array.length,
     randomIndex;

@@ -11,6 +11,7 @@ const {
   changeUserAvatar,
   fetchUserAvatar,
   changeUserProfile,
+  showDashboardWords,
 } = require("../../controllers/user");
 const { protect } = require("../../middleware/authMiddleware");
 const { upload } = require("../../middleware/uploadMiddleware");
@@ -23,7 +24,6 @@ router.get("/results/:lesson_id?", protect, showResults);
 router.get("/showUser", protect, showUser);
 router.post("/changeUserPassword", protect, changeUserPassword);
 router.post("/changeUserProfile", protect, changeUserProfile);
-
 router.post(
   "/changeUserAvatar",
   protect,
@@ -31,4 +31,5 @@ router.post(
   changeUserAvatar
 );
 router.get("/avatar/:user_id?", fetchUserAvatar);
+router.get("/showDashboardWords/:offset?", protect, showDashboardWords);
 module.exports = router;

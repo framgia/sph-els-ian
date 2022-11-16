@@ -77,3 +77,10 @@ span.lesson {
 .ProfileSettings * .ui.button {
   float: right;
 }
+
+.Container {
+  height: 100%;
+  display: flex;
+  align-items: stretch;
+  flex: 1;
+}

@@ -25,6 +25,7 @@ axiosInstance.interceptors.response.use(
     if (error.response.status === 403) {
       window.location = "/"; //Temporary fix
     }
+    return Promise.reject(error);
   }
 );
 

@@ -169,10 +169,36 @@ const deleteWord = asyncHandler(async (req, res) => {
   res.status(200).json({ msg: result });
 });
 
+const deleteLesson = asyncHandler(async (req, res) => {
+  //check if lesson_id exists
+  const { lesson_id } = req.body;
+  if (!lesson_id) {
+    res.status(400);
+    throw new Error("Missing Lesson Id");
+  }
+
+  //delete lesson
+  let result = await Lesson.destroy({
+    where: { id: lesson_id },
+  });
+
+  //throw error if delete failed
+  if (!result) {
+    res.status(400);
+    throw new Error("Delete Failed");
+  }
+
+  //delete words with lesson_id
+  await Word.destroy({ where: { lesson_id } });
+
+  //generate response
+  res.status(200).json({ msg: "Lesson Deleted" });
+});
 module.exports = {
   addLesson,
   viewLessons,
   addWord,
   viewLessonWords,
   deleteWord,
+  deleteLesson,
 };

@@ -145,4 +145,24 @@ const viewLessonWords = asyncHandler(async (req, res) => {
 
   res.status(200).json({ data: words, totalWords: lesson_word_count });
 });
-module.exports = { addLesson, viewLessons, addWord, viewLessonWords };
+
+const deleteWord = asyncHandler(async (req, res) => {
+  const { word_id } = req.body;
+  let result = await Word.destroy({
+    where: { id: word_id },
+  });
+  if (!result) {
+    res.status(400);
+    throw new Error("Delete Failed");
+  }
+  console.log(result);
+  res.status(200).json({ msg: result });
+});
+
+module.exports = {
+  addLesson,
+  viewLessons,
+  addWord,
+  viewLessonWords,
+  deleteWord,
+};

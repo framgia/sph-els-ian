@@ -151,6 +151,7 @@ export const validatePasswordSettings = (currPass, newPass, confirmPass) => {
   return errors;
 };
 export const totalPages = (total, maxView) => {
+  console.log(total);
   return Math.ceil(total / maxView) || 1;
 };
 

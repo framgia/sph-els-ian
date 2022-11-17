@@ -108,6 +108,16 @@ export const fetchResult = (lessonId) => async (dispatch, getState) => {
   });
 };
 
+export const fetchDashboardWords =
+  (offset = 0) =>
+  async (dispatch, getState) => {
+    let { data } = await server.get(`/user/showDashboardWords/${offset}`);
+    dispatch({
+      type: "FETCH_DASHBOARD_WORDS",
+      payload: data,
+    });
+  };
+
 export const fetchDashboardUser = () => async (dispatch, getState) => {
   let { data } = await server.get("/user/showUser");
   dispatch({

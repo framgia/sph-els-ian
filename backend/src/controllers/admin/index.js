@@ -155,7 +155,6 @@ const deleteWord = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("Delete Failed");
   }
-  console.log(result);
   res.status(200).json({ msg: result });
 });
 

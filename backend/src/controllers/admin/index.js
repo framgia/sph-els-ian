@@ -147,14 +147,25 @@ const viewLessonWords = asyncHandler(async (req, res) => {
 });
 
 const deleteWord = asyncHandler(async (req, res) => {
+  //check if word_id exists
   const { word_id } = req.body;
+  if (!word_id) {
+    res.status(400);
+    throw new Error("Missing Word Id");
+  }
+
+  //delete word
   let result = await Word.destroy({
     where: { id: word_id },
   });
+
+  //result = 0 if invalid id or already deleted word
   if (!result) {
     res.status(400);
     throw new Error("Delete Failed");
   }
+
+  //return response
   res.status(200).json({ msg: result });
 });
 

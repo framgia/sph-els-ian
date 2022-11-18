@@ -6,24 +6,27 @@ import { validateRegistrationForm } from "../../utils";
 const RegistrationForm = ({ setModal, setModalMsg }) => {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [cPassword, setCPassword] = useState("");
   const [errors, setErrors] = useState({
     noUsername: true,
     noPassword: true,
+    noEmail: true,
     noCPassword: true,
     cPassError: false,
   });
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    setErrors(validateRegistrationForm(username, password, cPassword));
+    setErrors(validateRegistrationForm(username, email, password, cPassword));
   };
 
   const apiCall = () => {
     server
       .post("/api/auth/register", {
         username,
+        email,
         password,
       })
       .then((response) => {
@@ -57,11 +60,15 @@ const RegistrationForm = ({ setModal, setModalMsg }) => {
     e.preventDefault();
     setUsername(e.target.value);
   };
+  const handleEmail = (e) => {
+    e.preventDefault();
+    setEmail(e.target.value);
+  };
   const handlePassword = (e) => {
     e.preventDefault();
     setPassword(e.target.value);
   };
-  const handleCpassword = (e) => {
+  const handleCPassword = (e) => {
     e.preventDefault();
     setCPassword(e.target.value);
   };
@@ -83,6 +90,15 @@ const RegistrationForm = ({ setModal, setModalMsg }) => {
         />
         <Form.Input
           required
+          className="register"
+          type="text"
+          name="email"
+          placeholder="Email"
+          onChange={(e) => handleEmail(e)}
+          value={email}
+        />
+        <Form.Input
+          required
           className=""
           type="password"
           name="password"
@@ -96,7 +112,7 @@ const RegistrationForm = ({ setModal, setModalMsg }) => {
           type="password"
           name="confirmPassword"
           placeholder="Confirm Password"
-          onChange={(e) => handleCpassword(e)}
+          onChange={(e) => handleCPassword(e)}
           value={cPassword}
           error={
             errors.cPassError

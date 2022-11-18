@@ -14,9 +14,11 @@ const { DB_LIMIT } = require("../../utils/constant");
 const {
   shuffleArray,
   validatePassword,
+  validateEmail,
   generateHash,
   deleteFile,
 } = require("../../utils/");
+const { Op } = require("sequelize");
 
 const { UPLOAD_DEST } = process.env;
 const fs = require("fs");
@@ -403,6 +405,40 @@ const fetchUserAvatar = asyncHandler(async (req, res) => {
   res.status(200).sendFile(avatar, { root: UPLOAD_DEST });
 });
 
+const changeUserProfile = asyncHandler(async (req, res) => {
+  //get username and email then validate
+  let { username, email } = req.body;
+  if (!username || !email) {
+    res.status(400);
+    throw new Error("Missing Username/Email");
+  }
+
+  //validate email
+  if (!validateEmail(email)) {
+    res.status(400);
+    throw new Error("Wrong Email Format");
+  }
+
+  //check if new username already exists
+  const user = await User.findOne({
+    where: { username: username, id: { [Op.not]: req.user_id } },
+  });
+  //error if success
+  if (user != undefined) {
+    res.status(400);
+    throw new Error("User already exists");
+  }
+
+  //update row
+  let response = await User.update(
+    { username, email },
+    { where: { id: req.user_id } }
+  );
+
+  //return success payload
+  res.status(200).json({ message: "Profile Changed Successfully" });
+});
+
 module.exports = {
   viewLesson,
   viewLessons,
@@ -410,6 +446,7 @@ module.exports = {
   submitQuiz,
   showResults,
   showUser,
+  changeUserProfile,
   changeUserPassword,
   changeUserAvatar,
   fetchUserAvatar,

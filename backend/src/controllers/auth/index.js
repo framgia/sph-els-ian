@@ -73,4 +73,12 @@ const loginUser = asyncHandler(async (req, res) => {
   //send back
   res.status(200).json(user);
 });
-module.exports = { registerUser, loginUser };
+
+const fetchUser = asyncHandler(async (req, res) => {
+  let user = await User.findOne({ where: { id: req.user_id } });
+  user = user.dataValues;
+  user = await removePassword(user);
+  user = await addJWTToken(user);
+  res.status(200).json(user);
+});
+module.exports = { registerUser, loginUser, fetchUser };

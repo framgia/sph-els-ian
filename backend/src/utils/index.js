@@ -66,6 +66,10 @@ const deleteFile = (name, root) => {
     console.log("File does not exist");
   }
 };
+const validateEmail = (email) => {
+  let pattern = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i;
+  return pattern.test(email);
+};
 module.exports = {
   validatePassword,
   removePassword,
@@ -74,4 +78,5 @@ module.exports = {
   generateHash,
   shuffleArray,
   deleteFile,
+  validateEmail,
 };

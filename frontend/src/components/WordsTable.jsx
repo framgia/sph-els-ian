@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import { fetchWords } from "../actions";
 import { totalPages } from "../utils";
 import { viewWordsRows } from "../utils/constant";
+import server from "../api/server";
 const WordsTable = ({ words }) => {
   let { lessonId } = useParams();
   const dispatch = useDispatch();
@@ -18,6 +19,16 @@ const WordsTable = ({ words }) => {
   useEffect(() => {
     dispatch(fetchWords(activePage - 1, lessonId));
   }, []);
+
+  const handleDelete = (wordId) => {
+    server
+      .post("/api/admin/deleteWord", {
+        word_id: wordId,
+      })
+      .then(() => {
+        dispatch(fetchWords(activePage - 1, lesson_id));
+      });
+  };
 
   return (
     <div>
@@ -68,7 +79,12 @@ const WordsTable = ({ words }) => {
                     width={2}
                     textAlign="right"
                   >
-                    <Button className="negative">
+                    <Button
+                      className="negative"
+                      onClick={() => {
+                        handleDelete(word.id);
+                      }}
+                    >
                       <div className="ui center aligned">
                         <Icon className="trash" />
                       </div>

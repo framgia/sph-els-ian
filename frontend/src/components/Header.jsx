@@ -29,6 +29,12 @@ const Header = ({ hasUser, removeUser }) => {
           >
             Lessons
           </Menu.Item>
+          <Menu.Item
+            as={Link}
+            to="/settings"
+          >
+            Settings
+          </Menu.Item>
           <Menu.Item onClick={() => removeUser()}>Logout</Menu.Item>
         </Menu.Menu>
       ) : (

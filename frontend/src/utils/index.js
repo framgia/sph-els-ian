@@ -108,6 +108,22 @@ export const validateWordModal = (
   return errors;
 };
 
+export const validateProfileSettings = (username, email) => {
+  let errors = {};
+  if (username === "") {
+    errors = { ...errors, username: "Empty Username" };
+  } else {
+    errors = { ...errors, username: "" };
+  }
+  if (email === "") {
+    errors = { ...errors, email: "Empty Email" };
+  } else {
+    errors = { ...errors, email: "" };
+  }
+
+  return errors;
+};
+
 export const totalPages = (total, maxView) => {
   return Math.ceil(total / maxView) || 1;
 };

@@ -15,8 +15,11 @@ const {
   shuffleArray,
   validatePassword,
   generateHash,
+  deleteFile,
 } = require("../../utils/");
 
+const { UPLOAD_DEST } = process.env;
+const fs = require("fs");
 const viewLessons = asyncHandler(async (req, res) => {
   //set Offset
   let offset = req.params.offset || 0;
@@ -340,6 +343,66 @@ const changeUserPassword = asyncHandler(async (req, res) => {
   res.status(200).json({ message: "Password Changed Successfully" });
 });
 
+const changeUserAvatar = asyncHandler(async (req, res) => {
+  //check if file upload is successful
+  let filename = "";
+  if (req.fileError) {
+    res.status(415);
+    throw new Error(req.fileError);
+  }
+
+  //if no files are uploaded considered as remove avatar
+  filename = req.file?.filename || "default.jpeg";
+
+  //delete previous image
+  let { avatar } = await User.findOne({
+    attributes: ["avatar"],
+    where: { id: req.user_id },
+  });
+  deleteFile(avatar, UPLOAD_DEST);
+
+  // update User avatar
+  await User.update({ avatar: filename }, { where: { id: req.user_id } });
+
+  //add response
+  res.status(200).json({ msg: "Successfully changed Avatar" });
+});
+
+const fetchUserAvatar = asyncHandler(async (req, res) => {
+  //check for parameters
+  //if no parameters use user_id
+  let user_id = req.params.user_id;
+
+  //error if parameter is invalid
+  if (isNaN(user_id) || user_id < 0) {
+    res.status(400);
+    throw new Error("Invalid User ID");
+  }
+
+  //find the avatar
+  let user = await User.findOne({
+    attributes: ["avatar"],
+    where: { id: user_id },
+  });
+
+  //set to default if no connected avatar
+  let avatar = "default.jpeg";
+  if (user !== null) {
+    avatar = user.avatar;
+  }
+
+  //setup file path
+  let filepath = UPLOAD_DEST + "/" + avatar;
+
+  //check if file exists
+  if (!fs.existsSync(filepath)) {
+    avatar = "default.jpeg";
+  }
+
+  //send file
+  res.status(200).sendFile(avatar, { root: UPLOAD_DEST });
+});
+
 module.exports = {
   viewLesson,
   viewLessons,
@@ -348,4 +411,6 @@ module.exports = {
   showResults,
   showUser,
   changeUserPassword,
+  changeUserAvatar,
+  fetchUserAvatar,
 };

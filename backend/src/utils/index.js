@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const path = require("path");
+const fs = require("fs");
 require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
 
 const removePassword = async (payload) => {
@@ -47,6 +48,24 @@ const shuffleArray = (array) => {
   return array;
 };
 
+const deleteFile = (name, root) => {
+  const protected_files = ["default.jpeg"];
+  if (protected_files.includes(name)) {
+    return;
+  }
+  let filepath = root + "/" + name;
+  if (fs.existsSync(filepath)) {
+    fs.unlink(filepath, (response) => {
+      if (response) {
+        console.log(response);
+      } else {
+        console.log("File was deleted");
+      }
+    });
+  } else {
+    console.log("File does not exist");
+  }
+};
 module.exports = {
   validatePassword,
   removePassword,
@@ -54,4 +73,5 @@ module.exports = {
   generateJWTToken,
   generateHash,
   shuffleArray,
+  deleteFile,
 };

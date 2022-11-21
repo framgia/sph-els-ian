@@ -124,6 +124,32 @@ export const validateProfileSettings = (username, email) => {
   return errors;
 };
 
+export const validatePasswordSettings = (currPass, newPass, confirmPass) => {
+  let errors = {};
+  if (currPass === newPass) {
+    errors = { ...errors, newPass: "New Password cannot be old password" };
+  } else {
+    errors = { ...errors, newPass: "" };
+  }
+  if (confirmPass !== newPass) {
+    errors = {
+      ...errors,
+      confirmPass: "Confirm Password must match with New Password",
+    };
+  } else {
+    errors = { ...errors, confirmPass: "" };
+  }
+  if (currPass === "") {
+    errors = { ...errors, currPass: "Missing Current Password" };
+  } else {
+    errors = { ...errors, currPass: "" };
+  }
+  if (newPass === "") {
+    errors = { ...errors, newPass: "Missing New Password" };
+  }
+
+  return errors;
+};
 export const totalPages = (total, maxView) => {
   return Math.ceil(total / maxView) || 1;
 };

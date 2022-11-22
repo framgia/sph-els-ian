@@ -27,6 +27,28 @@ export const fetchUser = () => async (dispatch, getState) => {
   dispatch(setUser(user.data));
 };
 
+export const fetchUserList =
+  (offset = 0) =>
+  async (dispatch, getState) => {
+    const response = await server.get(`/user/viewUserList/${offset}`);
+    dispatch({
+      type: "FETCH_USER_LIST",
+      payload: response.data,
+    });
+  };
+
+export const fetchUserSearch =
+  (searchText, offset = 0) =>
+  async (dispatch, getState) => {
+    const response = await server.post(`/user/viewUserSearch/${offset}`, {
+      search_name: searchText,
+    });
+    dispatch({
+      type: "FETCH_USER_LIST",
+      payload: response.data,
+    });
+  };
+
 export const fetchLessonsAdmin =
   (offset = 0) =>
   async (dispatch, getState) => {

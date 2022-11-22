@@ -6,6 +6,7 @@ import { wordReducer } from "./wordReducer";
 import { quizReducer } from "./quizReducer";
 import { resultReducer } from "./resultReducer";
 import { dashboardReducer } from "./dashboardReducer";
+import { userListReducer } from "./userListReducer";
 
 export default combineReducers({
   test: () => "0",
@@ -16,4 +17,5 @@ export default combineReducers({
   quiz: quizReducer,
   result: resultReducer,
   dashboard: dashboardReducer,
+  userList: userListReducer,
 });

@@ -57,6 +57,7 @@ export const fetchLesson = (lessonId) => async (dispatch) => {
   let payload = {
     data: data.lesson,
     words: data.words,
+    hasTaken: data.hasTaken,
   };
   dispatch({ type: "FETCH_LESSON", payload: payload });
 };
@@ -94,7 +95,6 @@ export const fetchQuiz = (lessonId) => async (dispatch, getState) => {
 export const fetchResult = (lesson_id) => async (dispatch, getState) => {
   const response = await server.get(`/user/results/${lesson_id}`);
   let { data } = response;
-  console.log(response);
   dispatch({
     type: "FETCH_RESULT",
     payload: data,

@@ -55,14 +55,11 @@ const viewLesson = asyncHandler(async (req, res) => {
     where: { id: lesson_id },
   });
 
-<<<<<<< HEAD
-=======
   if (lesson === null) {
     res.status(403);
     throw new Error("Lesson does not exist.");
   }
   //get sample words
->>>>>>> a311f43... [SELS-Feature][FE] Results Page
   let words = await Word.findAll({
     attributes: ["id", "jp_word", "lesson_id"],
     where: { lesson_id: lesson_id },
@@ -73,7 +70,17 @@ const viewLesson = asyncHandler(async (req, res) => {
       where: { isCorrect: 1 },
     },
   });
-  res.status(200).json({ lesson, words });
+  //check if user has already taken the quiz
+  const user = await Quiz.findOne({
+    where: { user_id: req.user_id, lesson_id },
+  });
+  let hasTaken = false;
+  //error if success
+  if (user != undefined) {
+    hasTaken = true;
+  }
+
+  res.status(200).json({ lesson, words, hasTaken });
 });
 
 const getQuiz = asyncHandler(async (req, res) => {
@@ -85,6 +92,18 @@ const getQuiz = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("Invalid Lesson ID. Please try another one.");
   }
+
+  //check if user has already taken the quiz
+  const user = await Quiz.findOne({
+    where: { user_id: req.user_id, lesson_id },
+  });
+
+  //error if success
+  if (user != undefined) {
+    res.status(400);
+    throw new Error("User has already taken the Quiz");
+  }
+
   let lesson = await Lesson.findOne({
     attributes: ["id", "title", "description"],
     where: { id: lesson_id },

@@ -12,6 +12,7 @@ import AdminLessonPage from "../pages/admin/AdminLessonPage";
 import LessonCardsPage from "../pages/user/LessonCardsPage";
 import LessonPage from "../pages/user/LessonPage";
 import QuizPage from "../pages/QuizPage";
+import ResultsPage from "../pages/ResultsPage";
 const RouteList = () => {
   return (
     <BrowserRouter>
@@ -49,6 +50,10 @@ const RouteList = () => {
             <Route
               path="quiz/:lessonId"
               element={<QuizPage />}
+            />
+            <Route
+              path="results/:lessonId"
+              element={<ResultsPage />}
             />
             {/* Admin Routes */}
             <Route

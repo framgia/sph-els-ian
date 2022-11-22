@@ -4,20 +4,13 @@ import { connect, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { fetchResult } from "../actions";
 import { isEmpty } from "../utils";
-{
-  //title //score
-  //3 col table for output // isCorrect, jp_word, answer
-}
 
 const ResultsPage = ({ result }) => {
-  let { lesson_id } = useParams();
+  let { lessonId } = useParams();
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(fetchResult(lesson_id));
+    dispatch(fetchResult(lessonId));
   }, []);
-  useEffect(() => {
-    console.log(result);
-  }, [result]);
   return (
     <div className="ResultsPage Outlet">
       <div className="ui centered grid">

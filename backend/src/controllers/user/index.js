@@ -2,17 +2,21 @@ const asyncHandler = require("express-async-handler");
 const path = require("path");
 require("dotenv").config({ path: path.resolve(__dirname, ".env") });
 const {
-  Lesson,
-  Word,
+  Activity,
+  ActivityType,
   Choice,
+  Follow,
+  Lesson,
   Quiz,
   QuizItem,
   User,
+  Word,
+  Sequelize,
   sequelize,
 } = require("../../models");
 const { DB_LIMIT } = require("../../utils/constant");
 const { shuffleArray } = require("../../utils/");
-const { response } = require("express");
+const { response, raw } = require("express");
 
 const viewLessons = asyncHandler(async (req, res) => {
   //set Offset
@@ -158,7 +162,9 @@ const submitQuiz = asyncHandler(async (req, res) => {
   let score = 0;
 
   //check if user has already taken the quiz
-  const user = await Quiz.findOne({ where: { user_id: req.user_id } });
+  const user = await Quiz.findOne({
+    where: { user_id: req.user_id, lesson_id },
+  });
 
   //error if success
   if (user != undefined) {
@@ -211,6 +217,13 @@ const submitQuiz = asyncHandler(async (req, res) => {
 
   //insert answers to quiz_items
   await QuizItem.bulkCreate([...result]);
+
+  //Insert to activity
+  await Activity.create({
+    user_id: req.user_id,
+    quiz_id: quiz.id,
+    activity_type: 2, //Temporary will change to either a query or a utils/constant
+  });
 
   //return score
   res.status(200).json({ msg: "submitQuiz Working", result });
@@ -280,7 +293,7 @@ const showUser = asyncHandler(async (req, res) => {
       [sequelize.fn("sum", sequelize.col("score")), "score"],
       [sequelize.fn("count", sequelize.col("lesson_id")), "lessons"],
     ],
-    where: { id: req.user_id },
+    where: { user_id: req.user_id },
     group: ["user_id"],
     raw: true,
   }).then((response) => {
@@ -300,6 +313,99 @@ const showUser = asyncHandler(async (req, res) => {
   });
 });
 
+const viewProfile = asyncHandler(async (req, res) => {
+  //For Profile Page - Only Quiz Activities
+  let user_id = req.params.user_id || 0;
+  if (isNaN(user_id) || user_id < 1) {
+    res.status(400);
+    throw new Error("Invalid user_id");
+  }
+
+  //User - username, avatar
+  const user = await User.findOne({
+    attributes: ["username", "avatar"],
+    where: { id: user_id },
+  });
+
+  //# of Followers
+  const followers = await Follow.count({
+    where: {
+      following_id: user_id,
+    },
+  });
+  //# of Following
+  const following = await Follow.count({
+    where: {
+      follower_id: user_id,
+    },
+  });
+
+  //isFollowing
+  let isFollowing = await Follow.findOne({
+    where: {
+      follower_id: req.user_id,
+      following_id: user_id,
+    },
+  }).then((response) => {
+    return response === null ? false : true;
+  });
+
+  //Learned words total
+  //Learned lessons total
+  let complete_lessons = 0;
+  let words_learned = 0;
+  const quizzes = await Quiz.findAll({
+    attributes: [
+      [sequelize.fn("sum", sequelize.col("score")), "score"],
+      [sequelize.fn("count", sequelize.col("lesson_id")), "lessons"],
+    ],
+    where: { user_id: user_id },
+    group: ["user_id"],
+    raw: true,
+  }).then((response) => {
+    if (response.length !== 0) {
+      complete_lessons = response[0].lessons;
+      words_learned = response[0].score;
+    }
+    return response;
+  });
+
+  //All Quiz with score chronological order or last 10 events //need total items on the quiz
+  console.log();
+  const activities = await Lesson.findAll({
+    attributes: [
+      "title",
+      [sequelize.col("Quizzes.score"), "score"],
+      [sequelize.fn("count", sequelize.col("Words.id")), "total"],
+    ],
+    include: [
+      {
+        model: Quiz,
+        attributes: [],
+        where: { user_id },
+      },
+      { model: Word, attributes: [] },
+    ],
+    group: ["Lesson.id"],
+    raw: true,
+    limit: 2,
+    subQuery: false,
+  });
+
+  res.status(200).json({
+    user,
+    followers,
+    following,
+    isFollowing,
+    complete_lessons,
+    words_learned,
+    activities,
+  });
+});
+
+//TODO const viewUserActivities = asyncHandler(async (req, res) => {
+//For Dashboard - Both Quiz and Follow Activities as well as followed activities
+// });
 module.exports = {
   viewLesson,
   viewLessons,
@@ -307,4 +413,5 @@ module.exports = {
   submitQuiz,
   showResults,
   showUser,
+  viewProfile,
 };

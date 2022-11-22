@@ -11,12 +11,14 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       const { User, QuizItem, Lesson } = models;
       Quiz.belongsTo(User, { foreignKey: "user_id" });
-      Quiz.hasMany(QuizItem, { foreignKey: " quiz_id" });
+      Quiz.hasMany(QuizItem, { foreignKey: "quiz_id" });
       Quiz.belongsTo(Lesson, { foreignKey: "lesson_id" });
     }
   }
   Quiz.init(
-    {},
+    {
+      score: DataTypes.BOOLEAN,
+    },
     {
       sequelize,
       modelName: "Quiz",

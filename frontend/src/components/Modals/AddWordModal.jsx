@@ -1,10 +1,14 @@
 import { Modal, Button, Form, Message } from "semantic-ui-react";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
+import { connect, useDispatch } from "react-redux";
 import server from "../../api/server";
 import { validateWordModal } from "../../utils";
-const AddWordModal = ({ modal, setModal }) => {
-  let { lesson_id } = useParams();
+import { fetchWords } from "../../actions";
+
+const AddWordModal = ({ modal, setModal, offset }) => {
+  let { lessonId } = useParams();
+  const dispatch = useDispatch();
   const initialFormState = {
     newWord: "",
     choice0: "",
@@ -34,13 +38,14 @@ const AddWordModal = ({ modal, setModal }) => {
     setIsLoading(true);
     server
       .post("/api/admin/addWord", {
-        lesson_id,
+        lesson_id: lessonId,
         new_word: newWord,
         choices: [choice0, choice1, choice2, choice3],
       })
       .then((response) => {
         setIsLoading(false);
         cancelModal();
+        dispatch(fetchWords(offset, lessonId));
       })
       .catch((error) => {
         setIsLoading(false);
@@ -217,4 +222,8 @@ const AddWordModal = ({ modal, setModal }) => {
     </Modal>
   );
 };
-export default AddWordModal;
+
+const mapStateToProps = (state) => {
+  return { offset: state.words.offset };
+};
+export default connect(mapStateToProps, null)(AddWordModal);

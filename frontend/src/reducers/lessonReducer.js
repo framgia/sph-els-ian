@@ -1,8 +1,8 @@
-const initial_state = {
+const initialState = {
   data: {},
   words: [],
 };
-export const lessonReducer = (state = initial_state, action) => {
+export const lessonReducer = (state = initialState, action) => {
   switch (action.type) {
     case "FETCH_LESSON":
       return action.payload;

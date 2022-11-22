@@ -2,7 +2,7 @@ import { Table, Pagination, Button, Icon } from "semantic-ui-react";
 import { useEffect, useState } from "react";
 import { connect, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { fetchLessons } from "../actions";
+import { fetchLessonsAdmin } from "../actions";
 import { totalPages } from "../utils";
 import { viewLessonsRows } from "../utils/constant";
 const LessonsTable = ({ lessons }) => {
@@ -11,11 +11,11 @@ const LessonsTable = ({ lessons }) => {
   const paginationHandler = (e, { activePage }) => {
     e.preventDefault();
     setActivePage(activePage);
-    dispatch(fetchLessons(activePage - 1));
+    dispatch(fetchLessonsAdmin(activePage - 1));
   };
 
   useEffect(() => {
-    dispatch(fetchLessons(activePage - 1));
+    dispatch(fetchLessonsAdmin(activePage - 1));
   }, []);
 
   return (

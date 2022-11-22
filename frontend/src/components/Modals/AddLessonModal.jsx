@@ -1,13 +1,16 @@
 import { Modal, Button, Form, Message } from "semantic-ui-react";
 import { useState } from "react";
+import { connect, useDispatch } from "react-redux";
 import server from "../../api/server";
 import { validateLessonModal } from "../../utils";
-const AddLessonModal = ({ modal, setModal }) => {
+import { fetchLessonsAdmin } from "../../actions";
+const AddLessonModal = ({ modal, setModal, offset }) => {
   const initialFormState = {
     title: "",
     description: "",
     server: "",
   };
+  const dispatch = useDispatch();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -30,6 +33,7 @@ const AddLessonModal = ({ modal, setModal }) => {
       .then((response) => {
         setIsLoading(false);
         cancelModal();
+        dispatch(fetchLessonsAdmin(offset));
       })
       .catch((error) => {
         setIsLoading(false);
@@ -122,4 +126,7 @@ const AddLessonModal = ({ modal, setModal }) => {
     </Modal>
   );
 };
-export default AddLessonModal;
+const mapStateToProps = (state) => {
+  return { offset: state.lessons.offset };
+};
+export default connect(mapStateToProps, null)(AddLessonModal);

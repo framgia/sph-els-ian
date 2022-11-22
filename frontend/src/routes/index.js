@@ -11,6 +11,7 @@ import AdminLessonListPage from "../pages/admin/AdminLessonListPage";
 import AdminLessonPage from "../pages/admin/AdminLessonPage";
 import LessonCardsPage from "../pages/user/LessonCardsPage";
 import LessonPage from "../pages/user/LessonPage";
+import QuizPage from "../pages/QuizPage";
 const RouteList = () => {
   return (
     <BrowserRouter>
@@ -32,6 +33,7 @@ const RouteList = () => {
             element={<Register />}
           />
           <Route element={<ProtectedRoutes />}>
+            {/* Regular User Routes */}
             <Route
               path="dashboard"
               element={<Dashboard />}
@@ -41,15 +43,20 @@ const RouteList = () => {
               element={<LessonCardsPage />}
             />
             <Route
-              path="lessons/:lesson_id"
+              path="lessons/:lessonId"
               element={<LessonPage />}
             />
+            <Route
+              path="quiz/:lessonId"
+              element={<QuizPage />}
+            />
+            {/* Admin Routes */}
             <Route
               path="admin/lessons"
               element={<AdminLessonListPage />}
             />
             <Route
-              path="admin/lessons/:lesson_id"
+              path="admin/lessons/:lessonId"
               element={<AdminLessonPage />}
             />
           </Route>

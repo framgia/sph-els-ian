@@ -19,7 +19,7 @@ const LessonCardsPage = ({ lessons }) => {
   }, []);
 
   return (
-    <div className="LessonPage">
+    <div className="LessonPage Outlet">
       <div className="ui centered grid">
         <div className="row">
           <Header as="h1">Lessons</Header>

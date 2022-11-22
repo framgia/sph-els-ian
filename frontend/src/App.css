@@ -1,8 +1,3 @@
-.App {
-  position: relative;
-  min-height: 100vh;
-}
-
 .Footer {
   position: fixed;
 }
@@ -21,6 +16,7 @@ span {
 span.lesson {
   max-height: 10em;
   display: inline-block;
+  /* overflow: ellipsis; */
   text-overflow: "see more";
 }
 
@@ -32,4 +28,40 @@ span.lesson {
 
 .ui.footer.segment {
   margin-top: 5vh;
+}
+
+.Layout {
+  min-height: 100vh;
+  flex-direction: column;
+  display: flex;
+}
+
+.Outlet {
+  flex: 1;
+  padding-top: 5vh;
+  padding-bottom: 5vh;
+  min-height: 80vh;
+}
+
+.ui.menu {
+  padding: 1em 2em 2em 2em !important;
+  margin: 0 !important;
+}
+
+.ui.footer {
+  margin: 0 !important;
+}
+
+.QuizPage {
+  background-color: green;
+}
+
+.quiz.ui.container > h1 {
+  font-size: 6em;
+  margin-top: 10vh;
+  margin-bottom: 10vh;
+}
+
+.quiz.ui.container {
+  padding: 15px;
 }

@@ -7,17 +7,17 @@ const RegistrationForm = ({ setModal, setModalMsg }) => {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [c_password, setC_password] = useState("");
+  const [cPassword, setCPassword] = useState("");
   const [errors, setErrors] = useState({
     noUsername: true,
     noPassword: true,
-    noC_password: true,
+    noCPassword: true,
     cPassError: false,
   });
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    setErrors(validateRegistrationForm(username, password, c_password));
+    setErrors(validateRegistrationForm(username, password, cPassword));
   };
 
   const apiCall = () => {
@@ -63,7 +63,7 @@ const RegistrationForm = ({ setModal, setModalMsg }) => {
   };
   const handleCpassword = (e) => {
     e.preventDefault();
-    setC_password(e.target.value);
+    setCPassword(e.target.value);
   };
 
   return (
@@ -94,10 +94,10 @@ const RegistrationForm = ({ setModal, setModalMsg }) => {
           required
           className=""
           type="password"
-          name="confirm_password"
+          name="confirmPassword"
           placeholder="Confirm Password"
           onChange={(e) => handleCpassword(e)}
-          value={c_password}
+          value={cPassword}
           error={
             errors.cPassError
               ? {

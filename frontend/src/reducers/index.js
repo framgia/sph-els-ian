@@ -3,6 +3,7 @@ import { userReducer } from "./userReducer";
 import { lessonsListReducer } from "./lessonsListReducer";
 import { lessonReducer } from "./lessonReducer";
 import { wordReducer } from "./wordReducer";
+import { quizReducer } from "./quizReducer";
 
 export default combineReducers({
   test: () => "0",
@@ -10,4 +11,5 @@ export default combineReducers({
   lessons: lessonsListReducer,
   words: wordReducer,
   lesson: lessonReducer,
+  quiz: quizReducer,
 });

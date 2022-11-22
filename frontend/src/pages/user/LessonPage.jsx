@@ -5,12 +5,11 @@ import { connect, useDispatch } from "react-redux";
 import { fetchLesson } from "../../actions";
 
 const LessonPage = ({ lesson }) => {
-  let { lesson_id } = useParams();
+  let { lessonId } = useParams();
   let [hasLesson, setHasLesson] = useState(false);
   const dispatch = useDispatch();
-
   useEffect(() => {
-    dispatch(fetchLesson(lesson_id));
+    dispatch(fetchLesson(lessonId));
   }, []);
 
   useEffect(() => {
@@ -22,7 +21,7 @@ const LessonPage = ({ lesson }) => {
   }, [lesson]);
 
   return (
-    <div className="LessonPage">
+    <div className="LessonPage Outlet">
       {hasLesson ? (
         <div className="ui centered grid">
           <div className="row">
@@ -58,8 +57,11 @@ const LessonPage = ({ lesson }) => {
             <Button
               inverted
               color="green"
+              disabled={lesson.hasTaken}
+              as={Link}
+              to={`/quiz/${lessonId}`}
             >
-              Start Lesson
+              Start Quiz
             </Button>
           </div>
           <div className="row">

@@ -7,7 +7,7 @@ const AdminLessonPage = (props) => {
   const [modal, setModal] = useState(false);
 
   return (
-    <div className="LessonPage">
+    <div className="LessonPage Outlet">
       <div className="ui grid">
         <div className="row">
           <div className="four wide column"></div>

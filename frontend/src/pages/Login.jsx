@@ -5,7 +5,7 @@ const Login = () => {
   const [modal, setModal] = useState(false);
   const [modalMsg, setModalMsg] = useState({ header: "", description: "" });
   return (
-    <div className="Login ui middle aligned center aligned grid">
+    <div className="Login Outlet ui middle aligned center aligned grid">
       <div className="column four wide">
         <h2 className="">Login</h2>
         <LoginForm

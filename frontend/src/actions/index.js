@@ -50,8 +50,10 @@ export const fetchLessons =
     });
   };
 
-export const fetchLesson = (lesson_id) => async (dispatch) => {
-  const { data } = await server.post(`/user/viewLesson`, { lesson_id });
+export const fetchLesson = (lessonId) => async (dispatch) => {
+  const { data } = await server.post(`/user/viewLesson`, {
+    lesson_id: lessonId,
+  });
   let payload = {
     data: data.lesson,
     words: data.words,
@@ -60,10 +62,10 @@ export const fetchLesson = (lesson_id) => async (dispatch) => {
 };
 
 export const fetchWords =
-  (offset = 0, lesson_id) =>
+  (offset = 0, lessonId) =>
   async (dispatch, getState) => {
     const words = await server.post(`/api/admin/viewLessonWords/${offset}`, {
-      lesson_id,
+      lesson_id: lessonId,
     });
     let payload = {
       offset,
@@ -75,3 +77,16 @@ export const fetchWords =
       payload: payload,
     });
   };
+
+export const fetchQuiz = (lessonId) => async (dispatch, getState) => {
+  const { data } = await server.post("/user/getQuiz", {
+    lesson_id: lessonId,
+  });
+  let payload = {
+    words: data.words,
+  };
+  dispatch({
+    type: "FETCH_QUIZ",
+    payload: payload,
+  });
+};

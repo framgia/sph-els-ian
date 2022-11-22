@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   Quiz.init(
     {
-      score: DataTypes.BOOLEAN,
+      score: DataTypes.INTEGER,
     },
     {
       sequelize,

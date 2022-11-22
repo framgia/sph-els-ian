@@ -15,6 +15,7 @@ const {
   showDashboardLessons,
   viewUserList,
   viewUserSearch,
+  viewProfile,
 } = require("../../controllers/user");
 const { protect } = require("../../middleware/authMiddleware");
 const { upload } = require("../../middleware/uploadMiddleware");
@@ -38,4 +39,5 @@ router.get("/showDashboardWords/:offset?", protect, showDashboardWords);
 router.get("/showDashboardLessons/:offset?", protect, showDashboardLessons);
 router.get("/viewUserList/:offset?", protect, viewUserList);
 router.post("/viewUserSearch/:offset?", protect, viewUserSearch);
+router.get("/viewProfile/:user_id", protect, viewProfile);
 module.exports = router;

@@ -13,6 +13,8 @@ const {
   changeUserProfile,
   showDashboardWords,
   showDashboardLessons,
+  viewUserList,
+  viewUserSearch,
 } = require("../../controllers/user");
 const { protect } = require("../../middleware/authMiddleware");
 const { upload } = require("../../middleware/uploadMiddleware");
@@ -34,5 +36,6 @@ router.post(
 router.get("/avatar/:user_id?", fetchUserAvatar);
 router.get("/showDashboardWords/:offset?", protect, showDashboardWords);
 router.get("/showDashboardLessons/:offset?", protect, showDashboardLessons);
-// router.get("/dashboard/words")
+router.get("/viewUserList/:offset?", protect, viewUserList);
+router.post("/viewUserSearch/:offset?", protect, viewUserSearch);
 module.exports = router;

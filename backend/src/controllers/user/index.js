@@ -9,6 +9,7 @@ const {
   QuizItem,
   User,
   sequelize,
+  Sequelize,
 } = require("../../models");
 const { DB_LIMIT } = require("../../utils/constant");
 const {
@@ -535,6 +536,72 @@ const showDashboardWords = asyncHandler(async (req, res) => {
   res.status(200).json({ words, totalWords });
 });
 
+const viewUserList = asyncHandler(async (req, res) => {
+  //set Offset
+  let offset = req.params.offset || 0;
+  if (isNaN(offset) || offset < 0) {
+    offset = 0;
+  }
+  //Search for User
+  //TODO add followers and stats
+  let user_list = await User.findAll({
+    attributes: ["id", "username", "avatar"],
+    limit: DB_LIMIT,
+    offset: offset * DB_LIMIT,
+  });
+  user_list.forEach((user) => {
+    if (user.avatar === null) {
+      user.avatar = "default.jpg";
+    }
+  });
+
+  //Count all Lessons with at least 1 Word
+  let total = await User.count();
+  res.status(200).json({ userList: user_list, total });
+});
+
+const viewUserSearch = asyncHandler(async (req, res) => {
+  let { search_name } = req.body;
+  if (!search_name) {
+    res.status(400);
+    throw new Error("Please enter a username");
+  }
+
+  let offset = req.params.offset || 0;
+  if (isNaN(offset) || offset < 0) {
+    offset = 0;
+  }
+
+  let [user_list, total] = await Promise.all([
+    User.findAll({
+      attributes: ["id", "username", "avatar"],
+      where: {
+        username: {
+          [Sequelize.Op.like]: `${search_name}%`,
+        },
+      },
+      limit: DB_LIMIT,
+      offset: offset * DB_LIMIT,
+    }).then((user_list) => {
+      user_list.forEach((user) => {
+        if (user.avatar === null) {
+          user.avatar = "default.jpg";
+        }
+      });
+      return user_list;
+    }),
+    User.count({
+      where: {
+        username: {
+          [Sequelize.Op.like]: `${search_name}%`,
+        },
+      },
+    }),
+  ]);
+
+  res.status(200).json({ userList: user_list, total });
+});
+
 module.exports = {
   viewLesson,
   viewLessons,
@@ -548,4 +615,6 @@ module.exports = {
   fetchUserAvatar,
   showDashboardWords,
   showDashboardLessons,
+  viewUserList,
+  viewUserSearch,
 };

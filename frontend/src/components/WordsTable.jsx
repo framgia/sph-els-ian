@@ -26,7 +26,7 @@ const WordsTable = ({ words }) => {
         word_id: wordId,
       })
       .then(() => {
-        dispatch(fetchWords(activePage - 1, lesson_id));
+        dispatch(fetchWords(activePage - 1, lessonId));
       });
   };
 

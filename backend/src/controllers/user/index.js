@@ -157,7 +157,9 @@ const submitQuiz = asyncHandler(async (req, res) => {
   let score = 0;
 
   //check if user has already taken the quiz
-  const user = await Quiz.findOne({ where: { user_id: req.user_id } });
+  const user = await Quiz.findOne({
+    where: { lesson_id, user_id: req.user_id },
+  });
 
   //error if success
   if (user != undefined) {

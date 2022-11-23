@@ -371,7 +371,6 @@ const viewProfile = asyncHandler(async (req, res) => {
   });
 
   //All Quiz with score chronological order or last 10 events //need total items on the quiz
-  console.log();
   const activities = await Lesson.findAll({
     attributes: [
       "title",
@@ -388,7 +387,7 @@ const viewProfile = asyncHandler(async (req, res) => {
     ],
     group: ["Lesson.id"],
     raw: true,
-    limit: 2,
+    limit: 10,
     subQuery: false,
   });
 

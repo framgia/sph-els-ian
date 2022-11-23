@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   QuizItem.init(
     {
-      isCorrect: DataTypes.BOOLEAN,
+      isCorrect: DataTypes.INTEGER,
     },
     {
       sequelize,

@@ -323,7 +323,7 @@ const viewProfile = asyncHandler(async (req, res) => {
 
   //User - username, avatar
   const user = await User.findOne({
-    attributes: ["username", "avatar"],
+    attributes: ["id", "username", "avatar"],
     where: { id: user_id },
   });
 
@@ -352,7 +352,7 @@ const viewProfile = asyncHandler(async (req, res) => {
 
   //Learned words total
   //Learned lessons total
-  let complete_lessons = 0;
+  let lessons_completed = 0;
   let words_learned = 0;
   const quizzes = await Quiz.findAll({
     attributes: [
@@ -364,7 +364,7 @@ const viewProfile = asyncHandler(async (req, res) => {
     raw: true,
   }).then((response) => {
     if (response.length !== 0) {
-      complete_lessons = response[0].lessons;
+      lessons_completed = response[0].lessons;
       words_learned = response[0].score;
     }
     return response;
@@ -373,9 +373,11 @@ const viewProfile = asyncHandler(async (req, res) => {
   //All Quiz with score chronological order or last 10 events //need total items on the quiz
   const activities = await Lesson.findAll({
     attributes: [
+      "id",
       "title",
       [sequelize.col("Quizzes.score"), "score"],
       [sequelize.fn("count", sequelize.col("Words.id")), "total"],
+      [sequelize.col("Quizzes.updatedAt"), "updatedAt"],
     ],
     include: [
       {
@@ -396,8 +398,8 @@ const viewProfile = asyncHandler(async (req, res) => {
     followers,
     following,
     isFollowing,
-    complete_lessons,
-    words_learned,
+    lessonsCompleted: lessons_completed,
+    wordsLearned: words_learned,
     activities,
   });
 });

@@ -92,8 +92,8 @@ export const fetchQuiz = (lessonId) => async (dispatch, getState) => {
   });
 };
 
-export const fetchResult = (lesson_id) => async (dispatch, getState) => {
-  const response = await server.get(`/user/results/${lesson_id}`);
+export const fetchResult = (lessonId) => async (dispatch, getState) => {
+  const response = await server.get(`/user/results/${lessonId}`);
   let { data } = response;
   dispatch({
     type: "FETCH_RESULT",

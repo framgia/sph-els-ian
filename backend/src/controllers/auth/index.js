@@ -8,12 +8,12 @@ const {
 } = require("../../utils");
 const registerUser = asyncHandler(async (req, res) => {
   //check payload
-  const { username, password } = req.body;
+  const { username, email, password } = req.body;
 
   //error if fail
-  if (!username || !password) {
+  if (!username || !password || !email) {
     res.status(400);
-    throw new Error("Missing Username/Password");
+    throw new Error("Missing Username/Email/Password");
   }
 
   //check if user exists
@@ -28,7 +28,11 @@ const registerUser = asyncHandler(async (req, res) => {
   //create account
   let new_user = await User.create({
     username: username,
+    email: email,
     password: await generateHash(password),
+  }).catch((error) => {
+    res.status(400);
+    throw new Error(error.message);
   });
 
   //remove password

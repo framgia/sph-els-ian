@@ -12,11 +12,12 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
      */
-    return queryInterface.bulkInsert("Users", [
+    await queryInterface.bulkInsert("Users", [
       {
         username: "12",
         password: await generateHash("1234"),
         avatar: "ehhhhhh",
+        isAdmin: true,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -24,6 +25,7 @@ module.exports = {
         username: "ian",
         password: await generateHash("1234"),
         avatar: "ehhhhhh",
+        isAdmin: false,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -31,6 +33,7 @@ module.exports = {
         username: "dave",
         password: await generateHash("1234"),
         avatar: "ehhhhhh",
+        isAdmin: false,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -38,6 +41,7 @@ module.exports = {
         username: "art",
         password: await generateHash("1234"),
         avatar: "ehhhhhh",
+        isAdmin: false,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -45,6 +49,7 @@ module.exports = {
         username: "mark",
         password: await generateHash("1234"),
         avatar: "ehhhhhh",
+        isAdmin: false,
         createdAt: new Date(),
         updatedAt: new Date(),
       },

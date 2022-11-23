@@ -1,11 +1,16 @@
 import { useState, useEffect, useRef } from "react";
 import { connect } from "react-redux";
 import { fetchQuiz } from "../actions";
-import { useParams } from "react-router-dom";
+import { redirect, useNavigate, useParams } from "react-router-dom";
 import { Button, Header, Loader, Progress } from "semantic-ui-react";
+import server from "../api/server";
+import ErrorModal from "../components/Modals/ErrorModal";
 const QuizPage = ({ quiz, fetchQuiz }) => {
+  const navigate = useNavigate();
   const [currentItem, setCurrentItem] = useState(1);
   const [answers, setAnswers] = useState({});
+  const [modal, setModal] = useState(false);
+  const [modalMsg, setModalMsg] = useState({ header: "", description: "" });
   const { lessonId } = useParams();
 
   useEffect(() => {
@@ -15,7 +20,26 @@ const QuizPage = ({ quiz, fetchQuiz }) => {
   useEffect(() => {
     if (quiz.words.length !== 0) {
       if (currentItem > quiz.words.length) {
-        //TODO apiCall('/user/validateAnswers')
+        server
+          .post("/user/submitQuiz", { lesson_id: lessonId, answers })
+          .then(() => {
+            navigate(`/results/${lessonId}`);
+          })
+          .catch((error) => {
+            if (error.code === "ERR_NETWORK") {
+              setModalMsg({
+                header: "503",
+                description: "Server Unavailable",
+              });
+              setModal(true);
+            } else {
+              setModalMsg({
+                header: error.response.status,
+                description: error.response.data.message,
+              });
+              setModal(true);
+            }
+          });
       }
     }
   }, [currentItem]);
@@ -51,9 +75,7 @@ const QuizPage = ({ quiz, fetchQuiz }) => {
                       Answer(quiz.words[currentItem - 1].id, choice.id)
                     }
                   >
-                    <span className="ui center aligned container">
-                      {choice.word}
-                    </span>
+                    {choice.word}
                   </Button>
                 );
               })}
@@ -72,6 +94,11 @@ const QuizPage = ({ quiz, fetchQuiz }) => {
           </div>
         </div>
       )}
+      <ErrorModal
+        modal={modal}
+        setModal={setModal}
+        modalMsg={modalMsg}
+      />
     </div>
   );
 };

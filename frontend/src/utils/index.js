@@ -111,3 +111,10 @@ export const validateWordModal = (
 export const totalPages = (total, maxView) => {
   return Math.ceil(total / maxView) || 1;
 };
+
+export const isEmpty = (obj) => {
+  if (Object.keys(obj).length === 0) {
+    return true;
+  }
+  return false;
+};

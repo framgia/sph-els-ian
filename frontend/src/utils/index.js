@@ -134,3 +134,10 @@ export const isEmpty = (obj) => {
   }
   return false;
 };
+
+export const checkFile = (file, validTypes) => {
+  if (validTypes.includes(file.type)) {
+    return true;
+  }
+  return false;
+};

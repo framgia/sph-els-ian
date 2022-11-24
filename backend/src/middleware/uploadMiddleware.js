@@ -1,6 +1,7 @@
 const path = require("path");
 require("dotenv").config({ path: path.resolve(__dirname, ".env") });
 const multer = require("multer");
+const { MAX_FILE_SIZE } = require("../utils/constant");
 const { UPLOAD_DEST } = process.env;
 
 const storage = multer.diskStorage({
@@ -24,6 +25,7 @@ const fileFilter = (req, file, cb) => {
   let typeList = ["image/jpeg", "image/png", "image/webp"];
 
   if (typeList.includes(file.mimetype)) {
+    console.log("here");
     return cb(null, true);
   }
 
@@ -31,6 +33,10 @@ const fileFilter = (req, file, cb) => {
   return cb(null, false);
 };
 
-let upload = multer({ storage: storage, fileFilter: fileFilter });
+let upload = multer({
+  storage: storage,
+  fileFilter: fileFilter,
+  limits: { fileSize: MAX_FILE_SIZE },
+});
 
 module.exports = { upload };

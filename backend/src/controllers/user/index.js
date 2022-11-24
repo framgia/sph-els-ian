@@ -11,8 +11,11 @@ const {
   sequelize,
 } = require("../../models");
 const { DB_LIMIT } = require("../../utils/constant");
-const { shuffleArray } = require("../../utils/");
-const { response } = require("express");
+const {
+  shuffleArray,
+  validatePassword,
+  generateHash,
+} = require("../../utils/");
 
 const viewLessons = asyncHandler(async (req, res) => {
   //set Offset
@@ -302,6 +305,41 @@ const showUser = asyncHandler(async (req, res) => {
   });
 });
 
+const changeUserPassword = asyncHandler(async (req, res) => {
+  //check payload
+  const { current_password, new_password } = req.body;
+
+  //error if fail
+  if (!current_password || !new_password) {
+    res.status(400);
+    throw new Error("Missing Current/New Password");
+  }
+
+  //find user password
+  const user = await User.findOne({ where: { id: req.user_id } });
+
+  //verify current password
+  if (!(await validatePassword(current_password, user.password))) {
+    res.status(400);
+    throw new Error("Wrong Current Password");
+  }
+
+  //check if password is the same
+  if (current_password === new_password) {
+    res.status(400);
+    throw new Error("New Password cannot be old password");
+  }
+
+  //update new password
+  await User.update(
+    { password: await generateHash(new_password) },
+    { where: { id: req.user_id } }
+  );
+
+  //deliver success payload
+  res.status(200).json({ message: "Password Changed Successfully" });
+});
+
 module.exports = {
   viewLesson,
   viewLessons,
@@ -309,4 +347,5 @@ module.exports = {
   submitQuiz,
   showResults,
   showUser,
+  changeUserPassword,
 };

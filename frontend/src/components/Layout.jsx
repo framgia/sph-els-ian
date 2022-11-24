@@ -7,14 +7,14 @@ import { connect } from "react-redux";
 const Layout = ({ user, setUser }) => {
   const [hasUser, setHasUser] = useState(false);
   useEffect(() => {
-    let localUser = window.localStorage.getItem("data");
+    let localUser = JSON.parse(localStorage.getItem("data"));
     if (localUser == null) {
       setHasUser(false);
     } else {
       setUser(localUser);
       setHasUser(true);
     }
-  }, [user]);
+  }, [user.id]);
 
   return (
     <div className="Layout">

@@ -13,6 +13,7 @@ import LessonCardsPage from "../pages/user/LessonCardsPage";
 import LessonPage from "../pages/user/LessonPage";
 import QuizPage from "../pages/QuizPage";
 import ResultsPage from "../pages/ResultsPage";
+import UserSettings from "../pages/UserSettings";
 const RouteList = () => {
   return (
     <BrowserRouter>
@@ -38,6 +39,10 @@ const RouteList = () => {
             <Route
               path="dashboard"
               element={<Dashboard />}
+            />
+            <Route
+              path="settings"
+              element={<UserSettings />}
             />
             <Route
               path="lessons"

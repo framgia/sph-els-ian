@@ -528,8 +528,7 @@ const viewProfile = asyncHandler(async (req, res) => {
     raw: true,
     limit: 10,
     subQuery: false,
-  });
-
+  }).then((response) => response.reverse());
   res.status(200).json({
     user,
     followers,

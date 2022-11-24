@@ -1,3 +1,4 @@
+import { DateTime } from "luxon";
 export const validateRegistrationForm = (
   username,
   email,
@@ -117,4 +118,9 @@ export const isEmpty = (obj) => {
     return true;
   }
   return false;
+};
+
+export const formatTime = (time) => {
+  let stringTime = DateTime.fromISO(time).toRelative();
+  return stringTime;
 };

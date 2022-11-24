@@ -65,3 +65,9 @@ span.lesson {
 .quiz.ui.container {
   padding: 15px;
 }
+
+.ProfilePage * .ui.segment {
+  background-color: transparent;
+  box-shadow: none !important;
+  border: none !important;
+}

@@ -7,7 +7,7 @@ import { connect } from "react-redux";
 const Layout = ({ user, setUser }) => {
   const [hasUser, setHasUser] = useState(false);
   useEffect(() => {
-    let localUser = JSON.parse(window.localStorage.getItem("data"));
+    let localUser = JSON.parse(localStorage.getItem("data"));
     if (localUser == null) {
       setHasUser(false);
     } else {

@@ -16,7 +16,7 @@ module.exports = {
       {
         username: "12",
         password: await generateHash("1234"),
-        avatar: "ehhhhhh",
+        avatar: "default.jpeg",
         isAdmin: true,
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -24,7 +24,7 @@ module.exports = {
       {
         username: "ian",
         password: await generateHash("1234"),
-        avatar: "ehhhhhh",
+        avatar: "default.jpeg",
         isAdmin: false,
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -32,7 +32,7 @@ module.exports = {
       {
         username: "dave",
         password: await generateHash("1234"),
-        avatar: "ehhhhhh",
+        avatar: "default.jpeg",
         isAdmin: false,
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -40,7 +40,7 @@ module.exports = {
       {
         username: "art",
         password: await generateHash("1234"),
-        avatar: "ehhhhhh",
+        avatar: "default.jpeg",
         isAdmin: false,
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -48,7 +48,7 @@ module.exports = {
       {
         username: "mark",
         password: await generateHash("1234"),
-        avatar: "ehhhhhh",
+        avatar: "default.jpeg",
         isAdmin: false,
         createdAt: new Date(),
         updatedAt: new Date(),

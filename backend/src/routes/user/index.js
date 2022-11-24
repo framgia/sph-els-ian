@@ -6,6 +6,7 @@ const {
   getQuiz,
   submitQuiz,
   showResults,
+  showUser,
 } = require("../../controllers/user");
 const { protect } = require("../../middleware/authMiddleware");
 
@@ -14,4 +15,5 @@ router.post("/viewLesson", protect, viewLesson);
 router.post("/getQuiz", protect, getQuiz);
 router.post("/submitQuiz", protect, submitQuiz);
 router.get("/results/:lesson_id?", protect, showResults);
+router.get("/showUser", protect, showUser);
 module.exports = router;

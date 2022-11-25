@@ -10,6 +10,7 @@ const {
   changeUserPassword,
   changeUserAvatar,
   fetchUserAvatar,
+  changeUserProfile,
 } = require("../../controllers/user");
 const { protect } = require("../../middleware/authMiddleware");
 const { upload } = require("../../middleware/uploadMiddleware");
@@ -21,6 +22,8 @@ router.post("/submitQuiz", protect, submitQuiz);
 router.get("/results/:lesson_id?", protect, showResults);
 router.get("/showUser", protect, showUser);
 router.post("/changeUserPassword", protect, changeUserPassword);
+router.post("/changeUserProfile", protect, changeUserProfile);
+
 router.post(
   "/changeUserAvatar",
   protect,

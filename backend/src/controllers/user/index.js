@@ -451,17 +451,6 @@ const changeUserProfile = asyncHandler(async (req, res) => {
   res.status(200).json({ message: "Profile Changed Successfully" });
 });
 
-
-  //find Followers and following
-
-  //generate response
-  res.status(200).json({
-    user,
-    complete_lessons,
-    words_learned,
-  });
-});
-
 const viewProfile = asyncHandler(async (req, res) => {
   //For Profile Page - Only Quiz Activities
   let user_id = req.params.user_id || 0;
@@ -569,5 +558,3 @@ module.exports = {
   fetchUserAvatar,
   viewProfile,
 };
-
-

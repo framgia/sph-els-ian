@@ -11,7 +11,6 @@ const {
   changeUserAvatar,
   fetchUserAvatar,
   changeUserProfile,
-  showUser,
   viewProfile,
 } = require("../../controllers/user");
 const { protect } = require("../../middleware/authMiddleware");
@@ -25,7 +24,6 @@ router.get("/results/:lesson_id?", protect, showResults);
 router.get("/showUser", protect, showUser);
 router.post("/changeUserPassword", protect, changeUserPassword);
 router.post("/changeUserProfile", protect, changeUserProfile);
-
 router.post(
   "/changeUserAvatar",
   protect,
@@ -33,6 +31,5 @@ router.post(
   changeUserAvatar
 );
 router.get("/avatar/:user_id?", fetchUserAvatar);
-router.get("/showUser", protect, showUser);
 router.get("/viewProfile/:user_id", protect, viewProfile);
 module.exports = router;

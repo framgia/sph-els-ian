@@ -95,7 +95,9 @@ const ProfilePage = ({
                         <Feed.Summary>
                           <Feed.User>{username}</Feed.User> learned{" "}
                           {activity.score} of {activity.total} in{" "}
-                          <Link>{activity.title}</Link>
+                          <Link to={`/lessons/${activity.id}`}>
+                            {activity.title}
+                          </Link>
                           <Feed.Date>
                             {formatTime(activity.updatedAt)}
                           </Feed.Date>

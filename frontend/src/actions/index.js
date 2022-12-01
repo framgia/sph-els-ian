@@ -105,14 +105,11 @@ export const viewProfile = (userId) => async (dispatch, getState) => {
   await server
     .get(`/user/viewProfile/${userId}`)
     .then((response) => {
-      console.log(response);
       let { data } = response;
       dispatch({
         type: "FETCH_PROFILE",
         payload: data,
       });
     })
-    .catch((error) => {
-      console.log(error);
-    });
+    .catch((error) => {});
 };

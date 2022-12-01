@@ -9,10 +9,11 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      const { User, QuizItem, Lesson } = models;
+      const { Activity, User, QuizItem, Lesson } = models;
       Quiz.belongsTo(User, { foreignKey: "user_id" });
       Quiz.hasMany(QuizItem, { foreignKey: "quiz_id" });
       Quiz.belongsTo(Lesson, { foreignKey: "lesson_id" });
+      Quiz.hasMany(Activity, { foreignKey: "quiz_id" });
     }
   }
   Quiz.init(

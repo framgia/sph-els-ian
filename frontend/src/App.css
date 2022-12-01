@@ -66,6 +66,12 @@ span.lesson {
   padding: 15px;
 }
 
+.ProfilePage * .ui.segment {
+  background-color: transparent;
+  box-shadow: none !important;
+  border: none !important;
+}
+
 .ProfileSettings * div.ui.label {
   background-color: transparent;
 }

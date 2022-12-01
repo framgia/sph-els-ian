@@ -23,9 +23,44 @@ const {
   deleteFile,
 } = require("../../utils/");
 const { Op } = require("sequelize");
-
 const { UPLOAD_DEST } = process.env;
 const fs = require("fs");
+
+//Functions
+const generateActivity = async ({
+  user_id = null,
+  quiz_id = null,
+  follow_id = null,
+  activity_type = null,
+}) => {
+  if (user_id == null || activity_type == null) {
+    return Promise.reject("Invalid user_id or activity_type");
+  }
+
+  if (follow_id == null ? !quiz_id == null : quiz_id) {
+    if (activity_type == 1) {
+      return Promise.reject("Invalid follow_id");
+    }
+    if (activity_type == 2) {
+      return Promise.reject("Invalid quiz_id");
+    }
+  }
+
+  return new Promise((resolve, reject) => {
+    Activity.create({
+      user_id,
+      quiz_id,
+      follow_id,
+      activity_type, //Temporary will change to either a query or a utils/constant
+    })
+      .then(() => {
+        return resolve();
+      })
+      .catch((err) => {
+        return reject(err);
+      });
+  });
+};
 const viewLessons = asyncHandler(async (req, res) => {
   //set Offset
   let offset = req.params.offset || 0;
@@ -227,11 +262,12 @@ const submitQuiz = asyncHandler(async (req, res) => {
   await QuizItem.bulkCreate([...result]);
 
   //Insert to activity
-  await Activity.create({
-    user_id: req.user_id,
-    quiz_id: quiz.id,
-    activity_type: 2, //Temporary will change to either a query or a utils/constant
-  });
+  await generateActivity({ user_id, quiz_id, activity_type: 2 }).catch(
+    (err) => {
+      res.status(400);
+      throw new Error(err);
+    }
+  );
 
   //return score
   res.status(200).json({ msg: "submitQuiz Working", result });
@@ -543,6 +579,56 @@ const viewProfile = asyncHandler(async (req, res) => {
 //TODO const viewUserActivities = asyncHandler(async (req, res) => {
 //For Dashboard - Both Quiz and Follow Activities as well as followed activities
 // });
+
+//Followers
+
+const toggleFollow = asyncHandler(async (req, res) => {
+  //check body
+  let { following_id } = req.body;
+  if (!following_id) {
+    res.status(400);
+    throw new Error("Missing following_id");
+  }
+  //check if user exists
+  let following = await User.findOne({
+    where: { id: following_id },
+  });
+  if (following == null) {
+    res.status(400);
+    throw new Error("User does not exist");
+  }
+  console.log(following);
+  //check if already following
+
+  let isFollowing = await Follow.findOne({
+    where: {
+      follower_id: req.user_id,
+      following_id,
+    },
+  });
+
+  if (isFollowing) {
+    //if following delete
+    await isFollowing.destroy();
+    res.status(200).json({ msg: "unfollow complete" });
+  } else {
+    //if not following add
+    //insert to follows table
+    let follow_row = await Follow.create({
+      follower_id: req.user_id,
+      following_id,
+    });
+    //insert to activities table
+    await generateActivity({
+      user_id: req.user_id,
+      follow_id: follow_row.id,
+      activity_type: 1,
+    });
+    res.status(200).json({ msg: "follow complete" });
+  }
+});
+
+//Module Exports
 module.exports = {
   viewLesson,
   viewLessons,
@@ -555,4 +641,5 @@ module.exports = {
   changeUserAvatar,
   fetchUserAvatar,
   viewProfile,
+  toggleFollow,
 };

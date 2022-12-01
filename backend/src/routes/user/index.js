@@ -12,6 +12,7 @@ const {
   fetchUserAvatar,
   changeUserProfile,
   viewProfile,
+  toggleFollow,
 } = require("../../controllers/user");
 const { protect } = require("../../middleware/authMiddleware");
 const { upload } = require("../../middleware/uploadMiddleware");
@@ -33,4 +34,5 @@ router.post(
 );
 router.get("/avatar/:user_id?", fetchUserAvatar);
 router.get("/viewProfile/:user_id", protect, viewProfile);
+router.post("/follow/toggle", protect, toggleFollow);
 module.exports = router;

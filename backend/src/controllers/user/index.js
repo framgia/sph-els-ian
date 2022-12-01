@@ -463,7 +463,10 @@ const viewProfile = asyncHandler(async (req, res) => {
     attributes: ["id", "username", "avatar"],
     where: { id: user_id },
   });
-
+  if (user == null) {
+    res.status(403);
+    throw new Error("User not found");
+  }
   //# of Followers
   const followers = await Follow.count({
     where: {

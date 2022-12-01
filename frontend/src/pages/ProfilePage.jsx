@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import { connect, useDispatch } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { Button, Divider, Feed, Header, Image } from "semantic-ui-react";
-import { viewProfile } from "../actions";
+import { toggleFollow, viewProfile } from "../actions";
 import { formatTime } from "../utils";
 const ProfilePage = ({
+  currentId,
   user: { username, avatar },
   followers,
   following,
@@ -27,6 +28,7 @@ const ProfilePage = ({
 
   const handleFollow = (e) => {
     e.preventDefault();
+    dispatch(toggleFollow(userId));
   };
   return (
     <div className="ProfilePage Outlet">
@@ -64,7 +66,11 @@ const ProfilePage = ({
                   </div>
                 </div>
                 <div className="row ui segment">
-                  <Button>{isFollowing ? "Following" : "Follow"}</Button>
+                  {currentId != userId && (
+                    <Button onClick={handleFollow}>
+                      {isFollowing ? "Following" : "Follow"}
+                    </Button>
+                  )}
                 </div>
                 <div className="row ui segment">
                   {wordsLearned > 0 && (
@@ -112,12 +118,13 @@ const ProfilePage = ({
     </div>
   );
 };
-const mapStateToProps = ({ profile }) => {
+const mapStateToProps = ({ user, profile }) => {
   return {
+    currentId: user.id,
     user: profile.user,
     followers: profile.followers,
     following: profile.following,
-    isFollowing: profile.following,
+    isFollowing: profile.isFollowing,
     lessonsCompleted: profile.lessonsCompleted,
     wordsLearned: profile.wordsLearned,
     activities: profile.activities,

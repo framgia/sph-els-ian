@@ -11,6 +11,7 @@ const {
   changeUserAvatar,
   fetchUserAvatar,
   changeUserProfile,
+  viewProfile,
 } = require("../../controllers/user");
 const { protect } = require("../../middleware/authMiddleware");
 const { upload } = require("../../middleware/uploadMiddleware");
@@ -31,4 +32,5 @@ router.post(
   changeUserAvatar
 );
 router.get("/avatar/:user_id?", fetchUserAvatar);
+router.get("/viewProfile/:user_id", protect, viewProfile);
 module.exports = router;

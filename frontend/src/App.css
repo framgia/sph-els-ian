@@ -77,3 +77,9 @@ span.lesson {
 .ProfileSettings * .ui.button {
   float: right;
 }
+
+.ProfilePage * .ui.segment {
+  background-color: transparent;
+  box-shadow: none !important;
+  border: none !important;
+}

@@ -5,7 +5,9 @@ import { Link, Outlet } from "react-router-dom";
 import user_logo from "../images/blank_profile.jpeg";
 import DashboardWords from "../components/DashboardWords";
 import DashboardLessons from "../components/DashboardLessons";
+import DashboardEmpty from "../components/DashboardEmpty";
 import { fetchDashboardUser } from "../actions";
+
 const Dashboard = ({ dashboard }) => {
   const dispatch = useDispatch();
   const [onDisplay, setOnDisplay] = useState("words"); // words, lessons, activities
@@ -15,6 +17,9 @@ const Dashboard = ({ dashboard }) => {
   }, []);
 
   const renderDashboardComponent = () => {
+    if (dashboard.wordsLearned == 0 && dashboard.completeLessons == 0) {
+      return <DashboardEmpty />;
+    }
     switch (onDisplay) {
       case "words":
         return <DashboardWords />;
@@ -28,7 +33,10 @@ const Dashboard = ({ dashboard }) => {
   };
   return (
     <div className="Dashboard Outlet">
-      <div className="ui centered three column grid">
+      <div
+        className="ui centered three column grid"
+        style={{ minHeight: "80vh" }}
+      >
         <div className="row">
           <div className="three wide column">
             <Card

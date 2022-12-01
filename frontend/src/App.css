@@ -65,3 +65,10 @@ span.lesson {
 .quiz.ui.container {
   padding: 15px;
 }
+
+.Container {
+  height: 100%;
+  display: flex;
+  align-items: stretch;
+  flex: 1;
+}

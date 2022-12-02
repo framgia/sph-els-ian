@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { fetchLessonsAdmin } from "../actions";
 import { totalPages } from "../utils";
 import { viewLessonsRows } from "../utils/constant";
+import server from "../api/server";
 const LessonsTable = ({ lessons }) => {
   const dispatch = useDispatch();
   const [activePage, setActivePage] = useState(1);
@@ -17,6 +18,16 @@ const LessonsTable = ({ lessons }) => {
   useEffect(() => {
     dispatch(fetchLessonsAdmin(activePage - 1));
   }, []);
+
+  const handleDelete = (lessonId) => {
+    server
+      .post("/api/admin/deleteLesson", {
+        lesson_id: lessonId,
+      })
+      .then(() => {
+        dispatch(fetchLessonsAdmin(activePage - 1));
+      });
+  };
 
   return (
     <div>
@@ -65,7 +76,10 @@ const LessonsTable = ({ lessons }) => {
                     className="table row"
                     textAlign="right"
                   >
-                    <Button className="negative">
+                    <Button
+                      className="negative"
+                      onClick={() => handleDelete(lesson.id)}
+                    >
                       <div className="ui center aligned">
                         <Icon className="trash" />
                       </div>

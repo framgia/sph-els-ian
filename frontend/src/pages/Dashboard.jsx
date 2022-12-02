@@ -6,11 +6,12 @@ import user_logo from "../images/blank_profile.jpeg";
 import DashboardWords from "../components/DashboardWords";
 import DashboardLessons from "../components/DashboardLessons";
 import DashboardEmpty from "../components/DashboardEmpty";
+import DashboardActivities from "../components/DashboardActivities";
 import { fetchDashboardUser } from "../actions";
 
 const Dashboard = ({ dashboard }) => {
   const dispatch = useDispatch();
-  const [onDisplay, setOnDisplay] = useState("words"); // words, lessons, activities
+  const [onDisplay, setOnDisplay] = useState("activities"); // words, lessons, activities
 
   useEffect(() => {
     dispatch(fetchDashboardUser());
@@ -26,9 +27,9 @@ const Dashboard = ({ dashboard }) => {
       case "lessons":
         return <DashboardLessons />;
       case "activities":
-      //TODO return <DashboardActivities />;
+        return <DashboardActivities />;
       default:
-        return "w";
+        return <DashboardActivities />;
     }
   };
   return (

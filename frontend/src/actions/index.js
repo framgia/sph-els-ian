@@ -135,3 +135,14 @@ export const fetchDashboardUser = () => async (dispatch, getState) => {
     payload: data,
   });
 };
+
+export const fetchDashboardActivities =
+  (offset = 0) =>
+  async (dispatch, getState) => {
+    let { data } = await server.get(`/user/showDashboardActivities/${offset}`);
+    console.log(data);
+    dispatch({
+      type: "FETCH_DASHBOARD_ACTIVITIES",
+      payload: data,
+    });
+  };

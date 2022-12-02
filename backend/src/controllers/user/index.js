@@ -25,6 +25,7 @@ const {
 const { Op } = require("sequelize");
 const { UPLOAD_DEST } = process.env;
 const fs = require("fs");
+const { response } = require("express");
 
 //Functions
 const generateActivity = async ({
@@ -609,15 +610,14 @@ const showDashboardActivities = asyncHandler(async (req, res) => {
     });
     return user_list;
   });
-  console.log(users);
   // search for all your and follows' activities
-  let { totalRows, activities } = await Activity.findAndCountAll({
+  let { totalActivities, activities } = await Activity.findAndCountAll({
     attributes: [
       "id",
       ["user_id", "userId"],
       [sequelize.col("User.username"), "username"],
-      // ["follow_id", "followId"],
-      // ["quiz_id", "quizId"],
+      ["follow_id", "followId"],
+      ["quiz_id", "quizId"],
       ["activity_type", "activityType"],
       "updatedAt",
       //For Follows
@@ -653,17 +653,33 @@ const showDashboardActivities = asyncHandler(async (req, res) => {
     offset: offset * DB_LIMIT,
     raw: true,
   }).then(({ count, rows }) => {
+    //Remove null attributes
     let temp_list = [];
     let o;
     rows.forEach((row) => {
       o = Object.fromEntries(Object.entries(row).filter(([_, v]) => v != null));
       temp_list.push(o);
     });
-    return { totalRows: count, activities: temp_list };
-    // return { count, activities: temp_list };
+    return { totalActivities: count, activities: temp_list };
   });
-  //
-  res.status(200).json({ msg: "activities", activities, totalRows });
+
+  //Get the total items for the Quizzes
+  let temp_list = [];
+  let total;
+  await Promise.all(
+    activities.map(async (activity) => {
+      if (activity.quizId) {
+        total = await QuizItem.count({ where: { quiz_id: activity.quizId } });
+        temp_list.push({ ...activity, total: total });
+      } else {
+        temp_list.push(activity);
+      }
+    })
+  );
+
+  res
+    .status(200)
+    .json({ msg: "activities", activities: temp_list, totalActivities });
 });
 
 //Followers

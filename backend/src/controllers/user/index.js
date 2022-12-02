@@ -347,6 +347,7 @@ const showUser = asyncHandler(async (req, res) => {
   let words_learned = 0;
   const quizzes = await Quiz.findAll({
     attributes: [
+      "lesson_id",
       [sequelize.fn("sum", sequelize.col("score")), "score"],
       [sequelize.fn("count", sequelize.col("lesson_id")), "lessons"],
     ],
@@ -356,17 +357,16 @@ const showUser = asyncHandler(async (req, res) => {
   }).then((response) => {
     if (response.length !== 0) {
       complete_lessons = response[0].lessons;
-      words_learned = response[0].score;
+      words_learned = parseInt(response[0].score);
     }
   });
-
   //find Followers and following
 
   //generate response
   res.status(200).json({
     user,
-    complete_lessons,
-    words_learned,
+    completeLessons: complete_lessons,
+    wordsLearned: words_learned,
   });
 });
 

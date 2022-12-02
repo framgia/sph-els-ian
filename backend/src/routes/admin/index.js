@@ -7,6 +7,7 @@ const {
   viewLessonWords,
   deleteWord,
   deleteLesson,
+  editLesson,
 } = require("../../controllers/admin");
 const { isAdmin } = require("../../middleware/adminMiddleware");
 const { protect } = require("../../middleware/authMiddleware");
@@ -17,4 +18,6 @@ router.post("/addWord", protect, isAdmin, addWord);
 router.post("/viewLessonWords/:offset?", protect, isAdmin, viewLessonWords);
 router.post("/deleteWord", protect, isAdmin, deleteWord);
 router.post("/deleteLesson", protect, isAdmin, deleteLesson);
+router.post("/editLesson", protect, isAdmin, editLesson);
+
 module.exports = router;

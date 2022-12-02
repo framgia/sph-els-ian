@@ -33,11 +33,14 @@ const generateActivity = async ({
   follow_id = null,
   activity_type = null,
 }) => {
+  console.log("generate activity \n\n\n\n");
+  console.log(user_id, quiz_id, follow_id, activity_type);
   if (user_id == null || activity_type == null) {
     return Promise.reject("Invalid user_id or activity_type");
   }
 
   if (follow_id == null ? !quiz_id == null : quiz_id) {
+    console.log("invalid user");
     if (activity_type == 1) {
       return Promise.reject("Invalid follow_id");
     }
@@ -262,12 +265,22 @@ const submitQuiz = asyncHandler(async (req, res) => {
   await QuizItem.bulkCreate([...result]);
 
   //Insert to activity
-  await generateActivity({ user_id, quiz_id, activity_type: 2 }).catch(
-    (err) => {
+  console.log("quiz");
+  await generateActivity({
+    user_id: req.user_id,
+    quiz_id: quiz.id,
+    activity_type: 2,
+  })
+    .then((resp) => {
+      console.log("jfklajfkldsjfljalfjslfjklsdajfl");
+      console.log(resp);
+    })
+    .catch((err) => {
+      console.log("ffklajfkldsjfljalfjslfjklsdajfl");
+      console.log(err);
       res.status(400);
       throw new Error(err);
-    }
-  );
+    });
 
   //return score
   res.status(200).json({ msg: "submitQuiz Working", result });
@@ -576,9 +589,82 @@ const viewProfile = asyncHandler(async (req, res) => {
   });
 });
 
-//TODO const viewUserActivities = asyncHandler(async (req, res) => {
 //For Dashboard - Both Quiz and Follow Activities as well as followed activities
-// });
+const showDashboardActivities = asyncHandler(async (req, res) => {
+  // offset params
+  let offset = req.params.offset || 0;
+  if (isNaN(offset) || offset < 0) {
+    offset = 0;
+  }
+  // get ids for user and all following
+  let users = await Follow.findAll({
+    attributes: ["following_id"],
+    where: { follower_id: req.user_id },
+    raw: true,
+  }).then((response) => {
+    let user_list = [];
+    user_list.push(req.user_id);
+    response.forEach(({ following_id }) => {
+      user_list.push(following_id);
+    });
+    return user_list;
+  });
+  console.log(users);
+  // search for all your and follows' activities
+  let { totalRows, activities } = await Activity.findAndCountAll({
+    attributes: [
+      "id",
+      ["user_id", "userId"],
+      [sequelize.col("User.username"), "username"],
+      // ["follow_id", "followId"],
+      // ["quiz_id", "quizId"],
+      ["activity_type", "activityType"],
+      "updatedAt",
+      //For Follows
+      [sequelize.col("Follow.User.id"), "followingId"],
+      [sequelize.col("Follow.User.username"), "followingUsername"],
+
+      //For Quizzes
+      [sequelize.col("Quiz.Lesson.id"), "lessonId"],
+      [sequelize.col("Quiz.Lesson.title"), "lessonTitle"],
+      [sequelize.col("Quiz.score"), "score"],
+    ],
+    include: [
+      {
+        model: Follow,
+        attributes: [],
+        include: [{ model: User, attributes: [] }],
+        required: false,
+      },
+      {
+        model: Quiz,
+        attributes: [],
+        include: [{ model: Lesson, attributes: [] }],
+        required: false,
+      },
+
+      { model: User, attributes: [] },
+    ],
+    where: {
+      user_id: users,
+    },
+    order: [["updatedAt", "DESC"]],
+    limit: DB_LIMIT,
+    offset: offset * DB_LIMIT,
+    raw: true,
+  }).then(({ count, rows }) => {
+    let temp_list = [];
+    let o;
+    rows.forEach((row) => {
+      o = Object.fromEntries(Object.entries(row).filter(([_, v]) => v != null));
+      temp_list.push(o);
+    });
+    return { totalRows: count, activities: temp_list };
+    // return { count, activities: temp_list };
+  });
+  //
+  res.status(200).json({ msg: "activities", activities, totalRows });
+});
 
 //Followers
 
@@ -641,4 +727,5 @@ module.exports = {
   fetchUserAvatar,
   viewProfile,
   toggleFollow,
+  showDashboardActivities,
 };

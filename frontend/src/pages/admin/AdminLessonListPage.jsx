@@ -1,9 +1,15 @@
 import { useState } from "react";
 import LessonsTable from "../../components/LessonsTable";
 import { Button } from "semantic-ui-react";
-import AddLessonModal from "../../components/Modals/AddLessonModal";
+import LessonModal from "../../components/Modals/LessonModal";
+const initialFormData = {
+  id: 0,
+  title: "",
+  description: "",
+};
 const AdminLessonListPage = () => {
   const [modal, setModal] = useState(false);
+  const [modalData, setModalData] = useState(initialFormData);
   return (
     <div className="LessonPage Outlet">
       <div className="ui grid">
@@ -17,13 +23,19 @@ const AdminLessonListPage = () => {
             >
               Add Lesson
             </Button>
-            <LessonsTable />
+            <LessonsTable
+              setModal={setModal}
+              setModalData={setModalData}
+            />
           </div>
         </div>
       </div>
-      <AddLessonModal
+      <LessonModal
         modal={modal}
         setModal={setModal}
+        modalData={modalData}
+        setModalData={setModalData}
+        initialFormData={initialFormData}
       />
     </div>
   );

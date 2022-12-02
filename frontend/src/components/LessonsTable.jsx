@@ -6,7 +6,7 @@ import { fetchLessonsAdmin } from "../actions";
 import { totalPages } from "../utils";
 import { viewLessonsRows } from "../utils/constant";
 import server from "../api/server";
-const LessonsTable = ({ lessons }) => {
+const LessonsTable = ({ lessons, setModal, setModalData }) => {
   const dispatch = useDispatch();
   const [activePage, setActivePage] = useState(1);
   const paginationHandler = (e, { activePage }) => {
@@ -18,6 +18,14 @@ const LessonsTable = ({ lessons }) => {
   useEffect(() => {
     dispatch(fetchLessonsAdmin(activePage - 1));
   }, []);
+  const handleEdit = (lesson) => {
+    let validKeys = ["id", "title", "description"];
+    Object.keys(lesson).forEach(
+      (key) => validKeys.includes(key) || delete lesson[key]
+    );
+    setModalData(lesson);
+    setModal(true);
+  };
 
   const handleDelete = (lessonId) => {
     server
@@ -84,7 +92,10 @@ const LessonsTable = ({ lessons }) => {
                         <Icon className="trash" />
                       </div>
                     </Button>
-                    <Button className="">
+                    <Button
+                      className=""
+                      onClick={() => handleEdit(lesson)}
+                    >
                       <div className="ui center aligned">
                         <Icon className="wrench" />
                       </div>

@@ -25,7 +25,6 @@ const fileFilter = (req, file, cb) => {
   let typeList = ["image/jpeg", "image/png", "image/webp"];
 
   if (typeList.includes(file.mimetype)) {
-    console.log("here");
     return cb(null, true);
   }
 

@@ -135,8 +135,15 @@ export const isEmpty = (obj) => {
   return false;
 };
 
-export const checkFile = (file, validTypes) => {
+export const checkFileType = (file, validTypes) => {
   if (validTypes.includes(file.type)) {
+    return true;
+  }
+  return false;
+};
+
+export const checkFileSize = (file, validSize) => {
+  if (file.size < validSize) {
     return true;
   }
   return false;

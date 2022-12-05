@@ -2,8 +2,8 @@ import { Button, Image, Message } from "semantic-ui-react";
 import { useState, useRef } from "react";
 import { connect } from "react-redux";
 import server from "../api/server";
-import { checkFile } from "../utils";
-import { validImageTypes } from "../utils/constant";
+import { checkFileSize, checkFileType } from "../utils";
+import { maxFileSize, validImageTypes } from "../utils/constant";
 const AvatarSettings = ({ userId }) => {
   let imgUrl = process.env.REACT_APP_API_URL;
   const inputFile = useRef(null);
@@ -20,8 +20,12 @@ const AvatarSettings = ({ userId }) => {
       apiCall();
       return;
     }
-    if (!checkFile(e.target.files[0], validImageTypes)) {
+    if (!checkFileType(e.target.files[0], validImageTypes)) {
       setError("Invalid Type. Please upload in jpeg, webp, or png formats.");
+      return;
+    }
+    if (!checkFileSize(e.target.files[0], maxFileSize)) {
+      setError("File is too large. Please try again.");
       return;
     }
     apiCall(e.target.files[0]);

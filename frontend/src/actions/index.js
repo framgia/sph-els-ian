@@ -108,4 +108,10 @@ export const fetchResult = (lessonId) => async (dispatch, getState) => {
   });
 };
 
-export const updateUser = (lessonId) => async (dispatch) => {};
+export const fetchDashboardUser = () => async (dispatch, getState) => {
+  let { data } = await server.get("/user/showUser");
+  dispatch({
+    type: "FETCH_DASHBOARD_USER",
+    payload: data,
+  });
+};

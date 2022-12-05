@@ -1,11 +1,11 @@
-import { Header, Divider, Feed, Pagination } from "semantic-ui-react";
+import { Header, Divider, Feed, Pagination, Popup } from "semantic-ui-react";
 import { connect, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { fetchDashboardActivities, fetchDashboardUser } from "../actions";
 import { formatTime, totalPages } from "../utils";
 import { viewFeedRows } from "../utils/constant";
-
+import { imgUrl } from "../utils/constant";
 const DashboardActivities = ({ activities, totalActivities }) => {
   const dispatch = useDispatch();
   const [activePage, setActivePage] = useState(1);
@@ -36,31 +36,48 @@ const DashboardActivities = ({ activities, totalActivities }) => {
                   className="ui align center"
                 >
                   <Feed.Label>
-                    <img src="https://react.semantic-ui.com/images/avatar/small/elliot.jpg" />
+                    {/* <img src="https://react.semantic-ui.com/images/avatar/small/elliot.jpg" /> */}
+                    <img src={`${imgUrl}/user/avatar/${activity.userId}`} />
                   </Feed.Label>
                   <Feed.Content>
                     {activity.activityType == 1 && (
                       <Feed.Summary>
-                        <Feed.User>{activity.username}</Feed.User> folllows{" "}
-                        <Feed.User>{activity.followingUsername}</Feed.User>
-                        <Feed.Date>{formatTime(activity.updatedAt)}</Feed.Date>
+                        <Link to={`/users/${activity.userId}`}>
+                          {activity.username}
+                        </Link>{" "}
+                        folllows{" "}
+                        <Link to={`/users/${activity.followingId}`}>
+                          {activity.followingUsername}
+                        </Link>
+                        <Popup
+                          content={activity.updatedAt}
+                          trigger={
+                            <Feed.Date>
+                              {formatTime(activity.updatedAt)}
+                            </Feed.Date>
+                          }
+                        />
                       </Feed.Summary>
                     )}
                     {activity.activityType == 2 && (
                       <Feed.Summary>
-                        <Feed.User>{activity.username}</Feed.User> learned{" "}
-                        {activity.score} of {activity.total} in{" "}
+                        <Link to={`/users/${activity.userId}`}>
+                          {activity.username}
+                        </Link>{" "}
+                        learned {activity.score} of {activity.total} in{" "}
                         <Link to={`/lessons/${activity.lessonId}`}>
                           {activity.lessonTitle}
                         </Link>
-                        <Feed.Date>{formatTime(activity.updatedAt)}</Feed.Date>
+                        <Popup
+                          content={activity.updatedAt}
+                          trigger={
+                            <Feed.Date>
+                              {formatTime(activity.updatedAt)}
+                            </Feed.Date>
+                          }
+                        />
                       </Feed.Summary>
                     )}
-                    {/* <Feed.User>{username}</Feed.User> learned {activity.score}{" "} */}
-                    {/* of {activity.total} in{" "} */}
-                    {/* <Link to={`/lessons/${activity.id}`}> */}
-                    {/* {activity.title} */}
-                    {/* </Link> */}
                   </Feed.Content>
                 </Feed.Event>
               );

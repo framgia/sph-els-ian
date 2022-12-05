@@ -65,3 +65,15 @@ span.lesson {
 .quiz.ui.container {
   padding: 15px;
 }
+
+.ProfileSettings * div.ui.label {
+  background-color: transparent;
+}
+
+.ProfileSettings * .ui.input {
+  float: right;
+}
+
+.ProfileSettings * .ui.button {
+  float: right;
+}

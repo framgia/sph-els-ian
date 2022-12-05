@@ -20,6 +20,13 @@ export const removeUser = () => {
   };
 };
 
+export const fetchUser = () => async (dispatch, getState) => {
+  const user = await server.get(`/api/auth/user`);
+  window.localStorage.setItem("data", JSON.stringify(user.data));
+  window.localStorage.setItem("accessToken", user.data.token);
+  dispatch(setUser(user.data));
+};
+
 export const fetchLessonsAdmin =
   (offset = 0) =>
   async (dispatch, getState) => {
@@ -100,3 +107,5 @@ export const fetchResult = (lessonId) => async (dispatch, getState) => {
     payload: data,
   });
 };
+
+export const updateUser = (lessonId) => async (dispatch) => {};

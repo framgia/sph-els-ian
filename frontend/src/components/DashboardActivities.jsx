@@ -36,7 +36,6 @@ const DashboardActivities = ({ activities, totalActivities }) => {
                   className="ui align center"
                 >
                   <Feed.Label>
-                    {/* <img src="https://react.semantic-ui.com/images/avatar/small/elliot.jpg" /> */}
                     <img src={`${imgUrl}/user/avatar/${activity.userId}`} />
                   </Feed.Label>
                   <Feed.Content>

@@ -36,14 +36,11 @@ const generateActivity = async ({
   follow_id = null,
   activity_type = null,
 }) => {
-  console.log("generate activity \n\n\n\n");
-  console.log(user_id, quiz_id, follow_id, activity_type);
   if (user_id == null || activity_type == null) {
     return Promise.reject("Invalid user_id or activity_type");
   }
 
   if (follow_id == null ? !quiz_id == null : quiz_id) {
-    console.log("invalid user");
     if (activity_type == 1) {
       return Promise.reject("Invalid follow_id");
     }
@@ -268,19 +265,13 @@ const submitQuiz = asyncHandler(async (req, res) => {
   await QuizItem.bulkCreate([...result]);
 
   //Insert to activity
-  console.log("quiz");
   await generateActivity({
     user_id: req.user_id,
     quiz_id: quiz.id,
     activity_type: 2,
   })
-    .then((resp) => {
-      console.log("jfklajfkldsjfljalfjslfjklsdajfl");
-      console.log(resp);
-    })
+    .then((resp) => {})
     .catch((err) => {
-      console.log("ffklajfkldsjfljalfjslfjklsdajfl");
-      console.log(err);
       res.status(400);
       throw new Error(err);
     });

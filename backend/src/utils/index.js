@@ -70,6 +70,21 @@ const validateEmail = (email) => {
   let pattern = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i;
   return pattern.test(email);
 };
+
+const removeNull = (rows) => {
+  let temp_list = [];
+  let o;
+  rows.forEach((row) => {
+    o = Object.fromEntries(Object.entries(row).filter(([_, v]) => v != null));
+    temp_list.push(o);
+  });
+  return temp_list;
+};
+
+const sortByTime = (rows) => {
+  return rows.sort((a, b) => a.updatedAt - b.updatedAt).reverse();
+};
+
 module.exports = {
   validatePassword,
   removePassword,
@@ -79,4 +94,6 @@ module.exports = {
   shuffleArray,
   deleteFile,
   validateEmail,
+  removeNull,
+  sortByTime,
 };

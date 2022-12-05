@@ -21,8 +21,10 @@ const {
   validateEmail,
   generateHash,
   deleteFile,
+  removeNull,
+  sortByTime,
 } = require("../../utils/");
-const { Op } = require("sequelize");
+const { Op, col } = require("sequelize");
 const { UPLOAD_DEST } = process.env;
 const fs = require("fs");
 const { response } = require("express");
@@ -633,8 +635,9 @@ const showDashboardActivities = asyncHandler(async (req, res) => {
       {
         model: Follow,
         attributes: [],
-        include: [{ model: User, attributes: [] }],
+        include: [{ model: User, attributes: [], required: true }],
         required: false,
+        where: { follower_id: req.user_id },
       },
       {
         model: Quiz,
@@ -647,6 +650,12 @@ const showDashboardActivities = asyncHandler(async (req, res) => {
     ],
     where: {
       user_id: users,
+      [Op.or]: [
+        { "$Follow.User.id$": { [Op.ne]: null } },
+        {
+          quiz_id: { [Op.ne]: null },
+        },
+      ],
     },
     order: [["updatedAt", "DESC"]],
     limit: DB_LIMIT,
@@ -654,13 +663,8 @@ const showDashboardActivities = asyncHandler(async (req, res) => {
     raw: true,
   }).then(({ count, rows }) => {
     //Remove null attributes
-    let temp_list = [];
-    let o;
-    rows.forEach((row) => {
-      o = Object.fromEntries(Object.entries(row).filter(([_, v]) => v != null));
-      temp_list.push(o);
-    });
-    return { totalActivities: count, activities: temp_list };
+    let activities = removeNull(rows);
+    return { totalActivities: count, activities };
   });
 
   //Get the total items for the Quizzes
@@ -676,6 +680,9 @@ const showDashboardActivities = asyncHandler(async (req, res) => {
       }
     })
   );
+
+  //sort according to time
+  temp_list = sortByTime(temp_list);
 
   res
     .status(200)

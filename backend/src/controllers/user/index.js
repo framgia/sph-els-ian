@@ -290,8 +290,8 @@ const showUser = asyncHandler(async (req, res) => {
       [sequelize.fn("sum", sequelize.col("score")), "score"],
       [sequelize.fn("count", sequelize.col("lesson_id")), "lessons"],
     ],
-    where: { id: req.user_id },
     group: ["user_id"],
+    where: { user_id: req.user_id },
     raw: true,
   }).then((response) => {
     if (response.length !== 0) {
@@ -439,6 +439,67 @@ const changeUserProfile = asyncHandler(async (req, res) => {
   res.status(200).json({ message: "Profile Changed Successfully" });
 });
 
+const showDashboardWords = asyncHandler(async (req, res) => {
+  //check for offset
+  let offset = req.params.offset || 0;
+  if (isNaN(offset) || offset < 0) {
+    offset = 0;
+  }
+
+  const [totalWords, words] = await Promise.all([
+    //totalWords
+    QuizItem.count({
+      attributes: ["id"],
+      include: [
+        {
+          model: Quiz,
+          where: { user_id: req.user_id },
+        },
+      ],
+      where: { isCorrect: true },
+    }),
+    //words
+    QuizItem.findAll({
+      attributes: ["id"],
+      include: [
+        {
+          model: Quiz,
+          where: { user_id: req.user_id },
+          attributes: ["id"],
+        },
+        {
+          model: Word,
+          attributes: ["id", "jp_word"],
+          include: {
+            model: Choice,
+            where: {
+              isCorrect: true,
+            },
+            attributes: ["id", "word"],
+          },
+        },
+      ],
+      where: { isCorrect: true },
+      limit: DB_LIMIT,
+      offset: offset * DB_LIMIT,
+      raw: true,
+    }).then((response) => {
+      let word_payload = [];
+      response.forEach((word) => {
+        word_payload.push({
+          id: word.id,
+          jp_word: word["Word.jp_word"],
+          word: word["Word.Choices.word"],
+        });
+      });
+      return word_payload;
+    }),
+  ]);
+
+  //generate response
+  res.status(200).json({ words, totalWords });
+});
+
 module.exports = {
   viewLesson,
   viewLessons,
@@ -450,4 +511,5 @@ module.exports = {
   changeUserPassword,
   changeUserAvatar,
   fetchUserAvatar,
+  showDashboardWords,
 };

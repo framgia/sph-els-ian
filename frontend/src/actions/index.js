@@ -75,9 +75,17 @@ export const fetchWords =
     const words = await server.post(`/api/admin/viewLessonWords/${offset}`, {
       lesson_id: lessonId,
     });
+
+    //clean words
+    let wordList = words.data.data;
+    wordList.map((word) => {
+      word["choices"] = word["Choices"];
+      delete word["Choices"];
+    });
+
     let payload = {
       offset,
-      data: words.data.data,
+      data: wordList,
       totalWords: words.data.totalWords,
     };
     dispatch({

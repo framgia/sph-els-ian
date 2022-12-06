@@ -6,7 +6,7 @@ import { fetchWords } from "../actions";
 import { totalPages } from "../utils";
 import { viewWordsRows } from "../utils/constant";
 import server from "../api/server";
-const WordsTable = ({ words }) => {
+const WordsTable = ({ words, setModal, setModalData }) => {
   let { lessonId } = useParams();
   const dispatch = useDispatch();
   const [activePage, setActivePage] = useState(1);
@@ -29,7 +29,10 @@ const WordsTable = ({ words }) => {
         dispatch(fetchWords(activePage - 1, lessonId));
       });
   };
-
+  const handleEdit = (word) => {
+    setModalData(word);
+    setModal(true);
+  };
   return (
     <div>
       <Table
@@ -71,7 +74,7 @@ const WordsTable = ({ words }) => {
                         width={2}
                         key={`${word.id} ${index}`}
                       >
-                        <span>{word.Choices[index].word}</span>
+                        <span>{word.choices[index].word}</span>
                       </Table.Cell>
                     );
                   })}
@@ -89,7 +92,10 @@ const WordsTable = ({ words }) => {
                         <Icon className="trash" />
                       </div>
                     </Button>
-                    <Button className="">
+                    <Button
+                      className=""
+                      onClick={() => handleEdit(word)}
+                    >
                       <div className="ui center aligned">
                         <Icon className="wrench" />
                       </div>

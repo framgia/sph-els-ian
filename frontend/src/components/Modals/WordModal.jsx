@@ -1,15 +1,22 @@
 import { Modal, Button, Form, Message } from "semantic-ui-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { connect, useDispatch } from "react-redux";
 import server from "../../api/server";
 import { validateWordModal } from "../../utils";
 import { fetchWords } from "../../actions";
 
-const AddWordModal = ({ modal, setModal, offset }) => {
+const WordModal = ({
+  modal,
+  setModal,
+  offset,
+  modalData,
+  setModalData,
+  initialModalData,
+}) => {
   let { lessonId } = useParams();
   const dispatch = useDispatch();
-  const initialFormState = {
+  const initialErrorState = {
     newWord: "",
     choice0: "",
     choice1: "",
@@ -18,13 +25,14 @@ const AddWordModal = ({ modal, setModal, offset }) => {
     duplicate: "",
     server: "",
   };
-  const [newWord, setNewWord] = useState("");
-  const [choice0, setChoice0] = useState("");
-  const [choice1, setChoice1] = useState("");
-  const [choice2, setChoice2] = useState("");
-  const [choice3, setChoice3] = useState("");
+  const [newWord, setNewWord] = useState(modalData.jp_word);
+  const [choice0, setChoice0] = useState(modalData.choices[0].word);
+  const [choice1, setChoice1] = useState(modalData.choices[1].word);
+  const [choice2, setChoice2] = useState(modalData.choices[2].word);
+  const [choice3, setChoice3] = useState(modalData.choices[3].word);
   const [isLoading, setIsLoading] = useState(false);
-  const [errors, setErrors] = useState(initialFormState);
+  const [errors, setErrors] = useState(initialErrorState);
+  const [isDifferent, setIsDifferent] = useState(false);
   const onSubmit = async (e) => {
     e.preventDefault();
     let sample = validateWordModal(newWord, choice0, choice1, choice2, choice3);
@@ -35,44 +43,72 @@ const AddWordModal = ({ modal, setModal, offset }) => {
   };
 
   const apiCall = () => {
-    setIsLoading(true);
-    server
-      .post("/api/admin/addWord", {
-        lesson_id: lessonId,
-        new_word: newWord,
-        choices: [choice0, choice1, choice2, choice3],
-      })
-      .then((response) => {
-        setIsLoading(false);
-        cancelModal();
-        dispatch(fetchWords(offset, lessonId));
-      })
-      .catch((error) => {
-        setIsLoading(false);
-        let sample = validateWordModal(
-          newWord,
-          choice0,
-          choice1,
-          choice2,
-          choice3
-        );
-        let msg = error.response
-          ? error.response.data.message
-          : "Server is down. Please try again later.";
-        setErrors({ ...sample, server: msg });
-      });
+    if (modalData.id !== 0) {
+      setIsLoading(true);
+      server
+        .post("/api/admin/editWord", {
+          word_id: modalData.id,
+          word: newWord,
+          choices: [choice0, choice1, choice2, choice3],
+        })
+        .then((response) => {
+          console.log(response);
+          cancelModal();
+          dispatch(fetchWords(offset, lessonId));
+        })
+        .catch((error) => {
+          let sample = validateWordModal(
+            newWord,
+            choice0,
+            choice1,
+            choice2,
+            choice3
+          );
+          let msg = error.response
+            ? error.response.data.message
+            : "Server is down. Please try again later.";
+          setErrors({ ...sample, server: msg });
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    } else {
+      setIsLoading(true);
+      server
+        .post("/api/admin/addWord", {
+          lesson_id: lessonId,
+          new_word: newWord,
+          choices: [choice0, choice1, choice2, choice3],
+        })
+        .then((response) => {
+          setIsLoading(false);
+          cancelModal();
+          dispatch(fetchWords(offset, lessonId));
+        })
+        .catch((error) => {
+          setIsLoading(false);
+          let sample = validateWordModal(
+            newWord,
+            choice0,
+            choice1,
+            choice2,
+            choice3
+          );
+          let msg = error.response
+            ? error.response.data.message
+            : "Server is down. Please try again later.";
+          setErrors({ ...sample, server: msg });
+        });
+    }
   };
 
   //Clear on Exit
   const cancelModal = () => {
     setModal(false);
-    setNewWord("");
-    setChoice0("");
-    setChoice1("");
-    setChoice2("");
-    setChoice3("");
     setIsLoading(false);
-    setErrors(initialFormState);
+    setErrors(initialErrorState);
+    setModalData(initialModalData);
+    setIsDifferent(false);
   };
 
   //handlers
@@ -100,6 +136,32 @@ const AddWordModal = ({ modal, setModal, offset }) => {
     }
   };
 
+  useEffect(() => {
+    setNewWord(modalData.jp_word);
+    setChoice0(modalData.choices[0].word);
+    setChoice1(modalData.choices[1].word);
+    setChoice2(modalData.choices[2].word);
+    setChoice3(modalData.choices[3].word);
+  }, [modalData]);
+
+  useEffect(() => {
+    setIsDifferent(false);
+    if (newWord !== modalData.jp_word) {
+      setIsDifferent(true);
+    }
+    if (choice0 !== modalData.choices[0].word) {
+      setIsDifferent(true);
+    }
+    if (choice1 !== modalData.choices[1].word) {
+      setIsDifferent(true);
+    }
+    if (choice2 !== modalData.choices[2].word) {
+      setIsDifferent(true);
+    }
+    if (choice3 !== modalData.choices[3].word) {
+      setIsDifferent(true);
+    }
+  }, [newWord, choice0, choice1, choice2, choice3]);
   return (
     <Modal
       as={Form}
@@ -216,7 +278,7 @@ const AddWordModal = ({ modal, setModal, offset }) => {
           type="submit"
           positive
           loading={isLoading}
-          disabled={isLoading}
+          disabled={isLoading || !(isLoading || isDifferent)}
         />
       </Modal.Actions>
     </Modal>
@@ -226,4 +288,4 @@ const AddWordModal = ({ modal, setModal, offset }) => {
 const mapStateToProps = (state) => {
   return { offset: state.words.offset };
 };
-export default connect(mapStateToProps, null)(AddWordModal);
+export default connect(mapStateToProps, null)(WordModal);

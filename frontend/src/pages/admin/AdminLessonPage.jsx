@@ -1,10 +1,23 @@
 import { useState } from "react";
 import { Button } from "semantic-ui-react";
-import AddWordModal from "../../components/Modals/AddWordModal.jsx";
+import WordModal from "../../components/Modals/WordModal.jsx";
 import WordsTable from "../../components/WordsTable";
 import { Link } from "react-router-dom";
+
+const initialModalData = {
+  id: 0,
+  jp_word: "",
+  choices: [
+    { id: 0, word: "" },
+    { id: 1, word: "" },
+    { id: 2, word: "" },
+    { id: 3, word: "" },
+  ],
+};
+
 const AdminLessonPage = (props) => {
   const [modal, setModal] = useState(false);
+  const [modalData, setModalData] = useState(initialModalData);
 
   return (
     <div className="LessonPage Outlet">
@@ -31,13 +44,19 @@ const AdminLessonPage = (props) => {
             >
               Add New Word
             </Button>
-            <WordsTable />
+            <WordsTable
+              setModal={setModal}
+              setModalData={setModalData}
+            />
           </div>
         </div>
       </div>
-      <AddWordModal
+      <WordModal
         modal={modal}
         setModal={setModal}
+        modalData={modalData}
+        setModalData={setModalData}
+        initialModalData={initialModalData}
       />
     </div>
   );

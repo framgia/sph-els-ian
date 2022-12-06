@@ -87,21 +87,19 @@ const addWord = asyncHandler(async (req, res) => {
   }
 
   //insert new word
-  word = await Word.create({
-    lesson_id: lesson_id,
-    jp_word: new_word,
-  });
-
-  //get word id
-  let word_id = word.id;
-
-  //insert choices
-  await Choice.bulkCreate([
-    { word_id, isCorrect: true, word: choices[0] },
-    { word_id, isCorrect: false, word: choices[1] },
-    { word_id, isCorrect: false, word: choices[2] },
-    { word_id, isCorrect: false, word: choices[3] },
-  ]);
+  word = await Word.create(
+    {
+      lesson_id: lesson_id,
+      jp_word: new_word,
+      Choices: [
+        { isCorrect: true, word: choices[0] },
+        { isCorrect: false, word: choices[1] },
+        { isCorrect: false, word: choices[2] },
+        { isCorrect: false, word: choices[3] },
+      ],
+    },
+    { include: { model: Choice } }
+  );
 
   //send back
   res.status(200).json(`Successfully added ${new_word}`);

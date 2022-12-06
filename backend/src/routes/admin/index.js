@@ -8,6 +8,7 @@ const {
   deleteWord,
   deleteLesson,
   editLesson,
+  editWord,
 } = require("../../controllers/admin");
 const { isAdmin } = require("../../middleware/adminMiddleware");
 const { protect } = require("../../middleware/authMiddleware");
@@ -20,4 +21,5 @@ router.post("/deleteWord", protect, isAdmin, deleteWord);
 router.post("/deleteLesson", protect, isAdmin, deleteLesson);
 router.post("/editLesson", protect, isAdmin, editLesson);
 
+router.post("/editWord", protect, isAdmin, editWord);
 module.exports = router;

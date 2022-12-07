@@ -7,7 +7,6 @@ const Login = () => {
   return (
     <div className="Login Outlet ui middle aligned center aligned grid">
       <div className="column four wide">
-        <h2 className="">Login</h2>
         <LoginForm
           modal={modal}
           setModal={setModal}

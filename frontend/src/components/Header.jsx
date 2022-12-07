@@ -2,27 +2,23 @@ import { Link } from "react-router-dom";
 import { Button, Menu } from "semantic-ui-react";
 import { connect } from "react-redux";
 import { removeUser } from "../actions";
-const Header = ({ hasUser, removeUser }) => {
+const Header = ({ hasUser, isAdmin, removeUser }) => {
   return (
     <Menu
       inverted
       size="large"
       className="Header"
     >
-      <Menu.Item
-        as={Link}
-        to="/"
-      >
-        Home
-      </Menu.Item>
       {hasUser ? (
         <Menu.Menu position="right">
-          <Menu.Item
-            as={Link}
-            to="/admin/lessons"
-          >
-            Admin-Lessons
-          </Menu.Item>
+          {isAdmin && (
+            <Menu.Item
+              as={Link}
+              to="/admin/lessons"
+            >
+              Admin-Lessons
+            </Menu.Item>
+          )}
           <Menu.Item
             as={Link}
             to="/lessons"
@@ -39,6 +35,12 @@ const Header = ({ hasUser, removeUser }) => {
         </Menu.Menu>
       ) : (
         <Menu.Menu position="right">
+          <Menu.Item
+            as={Link}
+            to="/"
+          >
+            Home
+          </Menu.Item>
           <Menu.Item
             as={Link}
             to="/login"

@@ -1,10 +1,13 @@
-import { Header } from "semantic-ui-react";
+import { Header, Icon } from "semantic-ui-react";
 
 const Footer = () => {
   return (
     <div className="ui inverted vertical footer segment">
       <div className="ui center aligned container">
-        <Header className="inverted">Footer </Header>
+        <div className="div">
+          Copyright <Icon name="copyright outline" />
+          2022 IanUrriza. All Rights Reserved
+        </div>
       </div>
     </div>
   );

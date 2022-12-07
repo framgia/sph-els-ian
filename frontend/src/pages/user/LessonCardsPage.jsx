@@ -19,11 +19,9 @@ const LessonCardsPage = ({ lessons }) => {
   }, []);
 
   return (
-    <div className="LessonPage Outlet">
+    <div className="LessonPage Outlet ContainerGrid">
+      <Header as="h1">Lessons</Header>
       <div className="ui centered grid">
-        <div className="row">
-          <Header as="h1">Lessons</Header>
-        </div>
         <div className="row">
           <div className="ten wide column">
             <Card.Group itemsPerRow={2}>
@@ -60,15 +58,15 @@ const LessonCardsPage = ({ lessons }) => {
             </Card.Group>
           </div>
         </div>
-        <div className="row">
-          <Pagination
-            activePage={activePage}
-            pointing
-            secondary
-            totalPages={totalPages(lessons.totalLessons, viewWordsRows)}
-            onPageChange={paginationHandler}
-          />
-        </div>
+      </div>
+      <div className="Pagination ui center aligned container">
+        <Pagination
+          activePage={activePage}
+          pointing
+          secondary
+          totalPages={totalPages(lessons.totalLessons, viewWordsRows)}
+          onPageChange={paginationHandler}
+        />
       </div>
     </div>
   );

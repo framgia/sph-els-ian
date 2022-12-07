@@ -8,7 +8,6 @@ const Register = () => {
   return (
     <div className="Register Outlet ui middle aligned center aligned grid">
       <div className="column four wide">
-        <h2>Registration</h2>
         <RegistrationForm
           modal={modal}
           setModal={setModal}

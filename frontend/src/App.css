@@ -66,15 +66,12 @@ span.lesson {
   padding: 15px;
 }
 
-.ProfileSettings * div.ui.label {
+.PasswordSettings * .ui.label {
   background-color: transparent;
+  float: left;
 }
 
-.ProfileSettings * .ui.input {
-  float: right;
-}
-
-.ProfileSettings * .ui.button {
+.PasswordSettings * .ui.input {
   float: right;
 }
 

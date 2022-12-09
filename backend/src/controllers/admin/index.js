@@ -1,5 +1,7 @@
+const { response } = require("express");
 const asyncHandler = require("express-async-handler");
 const path = require("path");
+const { where } = require("sequelize");
 require("dotenv").config({ path: path.resolve(__dirname, ".env") });
 const { Op } = require("sequelize");
 const { Lesson, Word, Choice } = require("../../models");
@@ -217,6 +219,75 @@ const editLesson = asyncHandler(async (req, res) => {
   res.status(200).json({ msg: "Lesson Edited" });
 });
 
+const editWord = asyncHandler(async (req, res) => {
+  //check payload
+  const { word_id, word, choices = [] } = req.body;
+  //choices = [choice0,choice1,]
+  if (!word_id || !word) {
+    res.status(400);
+    throw new Error("Missing parameters");
+  }
+  //check for length of choices
+  if (choices.length != 4) {
+    res.status(400);
+    throw new Error("Not Enough Choices");
+  }
+
+  //check for duplicate choices
+  let temp_set = new Set(choices);
+  if (temp_set.size != 4) {
+    res.status(400);
+    throw new Error("Has Duplicate Choices");
+  }
+
+  // check if word_id exists
+  let orig_word = await Word.findOne({ where: { id: word_id }, raw: true })
+    .then((response) => {
+      if (response == null) {
+        return Promise.reject("Word does not exist");
+      }
+      return response;
+    })
+    .catch((error) => {
+      res.status(400);
+      throw new Error(error);
+    });
+  //check if new word exists
+  await Word.findOne({
+    where: { jp_word: word, lesson_id: orig_word.lesson_id },
+    raw: true,
+  }).then((response) => {
+    if (response !== null && response.id !== word_id) {
+      console.log(response);
+      res.status(400);
+      throw new Error("Word already exists please try again");
+    }
+  });
+  //Find the original choices
+  let choice_list = await Choice.findAll({
+    attributes: ["id"],
+    where: { word_id },
+    raw: true,
+  }).then((response) => {
+    let temp_list = response.map((choice, index) => {
+      return { ...choice, word: choices[index] };
+    });
+    return temp_list;
+  });
+  //edit word
+  //edit choices
+  const updateChoice = (id, word) => {
+    return Choice.update({ word: word }, { where: { id } });
+  };
+  let promises = [
+    Word.update({ jp_word: word }, { where: { id: word_id } }),
+    ...choice_list.map((choice) => updateChoice(choice.id, choice.word)),
+  ];
+  await Promise.all(promises);
+
+  res.status(200).json({ msg: "Word/Choice Edited" });
+});
+
 module.exports = {
   addLesson,
   viewLessons,
@@ -225,4 +296,5 @@ module.exports = {
   deleteWord,
   deleteLesson,
   editLesson,
+  editWord,
 };

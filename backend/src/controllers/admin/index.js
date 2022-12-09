@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const path = require("path");
 require("dotenv").config({ path: path.resolve(__dirname, ".env") });
+const { Op } = require("sequelize");
 const { Lesson, Word, Choice } = require("../../models");
 const { DB_LIMIT } = require("../../utils/constant");
 const addLesson = asyncHandler(async (req, res) => {
@@ -194,6 +195,28 @@ const deleteLesson = asyncHandler(async (req, res) => {
   //generate response
   res.status(200).json({ msg: "Lesson Deleted" });
 });
+
+const editLesson = asyncHandler(async (req, res) => {
+  const { id, title, description } = req.body;
+  if (!id || !title || !description) {
+    res.status(400);
+    throw new Error("Missing parameters");
+  }
+  //check if title is unique
+  let lesson = await Lesson.findOne({
+    where: { title: title, id: { [Op.not]: id } },
+  });
+
+  //Error if not
+  if (lesson != null) {
+    res.status(400);
+    throw new Error("Title already exists");
+  }
+
+  await Lesson.update({ title, description }, { where: { id } });
+  res.status(200).json({ msg: "Lesson Edited" });
+});
+
 module.exports = {
   addLesson,
   viewLessons,
@@ -201,4 +224,5 @@ module.exports = {
   viewLessonWords,
   deleteWord,
   deleteLesson,
+  editLesson,
 };

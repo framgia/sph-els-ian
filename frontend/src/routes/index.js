@@ -14,6 +14,10 @@ import LessonPage from "../pages/user/LessonPage";
 import QuizPage from "../pages/QuizPage";
 import ResultsPage from "../pages/ResultsPage";
 import UserSettings from "../pages/UserSettings";
+import UserListPage from "../pages/UserListPage";
+import UserSearchPage from "../pages/UserSearchPage";
+import ProfilePage from "../pages/ProfilePage";
+
 const RouteList = () => {
   return (
     <BrowserRouter>
@@ -47,6 +51,19 @@ const RouteList = () => {
             <Route
               path="lessons"
               element={<LessonCardsPage />}
+            />
+            <Route
+              path="search"
+              element={<UserSearchPage />}
+            />
+
+            <Route
+              path="users"
+              element={<UserListPage />}
+            />
+            <Route
+              path="users/:userId"
+              element={<ProfilePage />}
             />
             <Route
               path="lessons/:lessonId"

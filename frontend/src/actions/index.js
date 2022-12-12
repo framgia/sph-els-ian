@@ -115,3 +115,13 @@ export const fetchDashboardUser = () => async (dispatch, getState) => {
     payload: data,
   });
 };
+
+export const fetchDashboardLessons =
+  (offset = 0) =>
+  async (dispatch, getState) => {
+    let { data } = await server.get(`/user/showDashboardLessons/${offset}`);
+    dispatch({
+      type: "FETCH_DASHBOARD_LESSONS",
+      payload: data,
+    });
+  };

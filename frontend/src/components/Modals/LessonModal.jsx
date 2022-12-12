@@ -1,20 +1,30 @@
-import { Modal, Button, Form, Message } from "semantic-ui-react";
+import { Modal, Button, Form, Message, Input } from "semantic-ui-react";
 import { useState } from "react";
 import { connect, useDispatch } from "react-redux";
 import server from "../../api/server";
 import { validateLessonModal } from "../../utils";
 import { fetchLessonsAdmin } from "../../actions";
-const AddLessonModal = ({ modal, setModal, offset }) => {
-  const initialFormState = {
-    title: "",
-    description: "",
-    server: "",
-  };
+import { useEffect } from "react";
+const initialErrorState = {
+  title: "",
+  description: "",
+  server: "",
+};
+
+const LessonModal = ({
+  modal,
+  setModal,
+  offset,
+  modalData,
+  setModalData,
+  initialFormData,
+}) => {
   const dispatch = useDispatch();
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
+  const [title, setTitle] = useState(modalData.title);
+  const [description, setDescription] = useState(modalData.description);
   const [isLoading, setIsLoading] = useState(false);
-  const [errors, setErrors] = useState(initialFormState);
+  const [errors, setErrors] = useState(initialErrorState);
+  const [isDifferent, setIsDifferent] = useState(false);
   const onSubmit = async (e) => {
     e.preventDefault();
     let sample = validateLessonModal(title, description);
@@ -25,24 +35,48 @@ const AddLessonModal = ({ modal, setModal, offset }) => {
   };
   const apiCall = () => {
     setIsLoading(true);
-    server
-      .post("/api/admin/addLesson", {
-        title,
-        description,
-      })
-      .then((response) => {
-        setIsLoading(false);
-        cancelModal();
-        dispatch(fetchLessonsAdmin(offset));
-      })
-      .catch((error) => {
-        setIsLoading(false);
-        let sample = validateLessonModal(title, description);
-        let msg = error.response
-          ? error.response.data.message
-          : "Server is down. Please try again later.";
-        setErrors({ ...sample, server: msg });
-      });
+    if (!modalData.id) {
+      //Add
+      server
+        .post("/api/admin/addLesson", {
+          title,
+          description,
+        })
+        .then((response) => {
+          setIsLoading(false);
+          cancelModal();
+          dispatch(fetchLessonsAdmin(offset));
+        })
+        .catch((error) => {
+          setIsLoading(false);
+          let sample = validateLessonModal(title, description);
+          let msg = error.response
+            ? error.response.data.message
+            : "Server is down. Please try again later.";
+          setErrors({ ...sample, server: msg });
+        });
+    } else {
+      //Edit
+      server
+        .post("/api/admin/editLesson", {
+          id: modalData.id,
+          title,
+          description,
+        })
+        .then((response) => {
+          setIsLoading(false);
+          cancelModal();
+          dispatch(fetchLessonsAdmin(offset));
+        })
+        .catch((error) => {
+          setIsLoading(false);
+          let sample = validateLessonModal(title, description);
+          let msg = error.response
+            ? error.response.data.message
+            : "Server is down. Please try again later.";
+          setErrors({ ...sample, server: msg });
+        });
+    }
   };
 
   const cancelModal = () => {
@@ -50,7 +84,9 @@ const AddLessonModal = ({ modal, setModal, offset }) => {
     setTitle("");
     setDescription("");
     setIsLoading(false);
-    setErrors(initialFormState);
+    setErrors(initialErrorState);
+    setModalData(initialFormData);
+    setIsDifferent(false);
   };
 
   const handleTitle = (e) => {
@@ -62,7 +98,20 @@ const AddLessonModal = ({ modal, setModal, offset }) => {
     e.preventDefault();
     setDescription(e.target.value);
   };
+  useEffect(() => {
+    setTitle(modalData.title);
+    setDescription(modalData.description);
+  }, [modalData]);
 
+  useEffect(() => {
+    setIsDifferent(false);
+    if (title !== modalData.title) {
+      setIsDifferent(true);
+    }
+    if (description !== modalData.description) {
+      setIsDifferent(true);
+    }
+  }, [title, description]);
   return (
     <Modal
       as={Form}
@@ -120,7 +169,7 @@ const AddLessonModal = ({ modal, setModal, offset }) => {
           type="submit"
           positive
           loading={isLoading}
-          disabled={isLoading}
+          disabled={isLoading || !(isLoading || isDifferent)}
         />
       </Modal.Actions>
     </Modal>
@@ -129,4 +178,4 @@ const AddLessonModal = ({ modal, setModal, offset }) => {
 const mapStateToProps = (state) => {
   return { offset: state.lessons.offset };
 };
-export default connect(mapStateToProps, null)(AddLessonModal);
+export default connect(mapStateToProps, null)(LessonModal);

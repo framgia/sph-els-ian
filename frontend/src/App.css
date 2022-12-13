@@ -81,3 +81,44 @@ span.lesson {
   align-items: stretch;
   flex: 1;
 }
+
+.HomePage {
+  background-image: url(../public/homepage.jpeg);
+  background-size: 100%;
+}
+
+.HomePage * .ui.container {
+  /* background-color: rgba(0, 0, 0, 0.1); */
+  background-color: rgba(255, 255, 255, 0.1);
+  padding-top: 2em;
+  padding-bottom: 2em;
+}
+.HomePage * .ui.container * {
+  color: white;
+}
+
+.Register {
+  background-image: url(../public/register.jpeg);
+  background-size: 100%;
+}
+
+.Login {
+  background-image: url(../public/login.jpeg);
+  background-size: 100%;
+}
+.ContainerGrid {
+  height: 100%;
+  display: grid;
+  flex: 1;
+  flex-direction: column;
+  /* align-items: center; */
+  /* align-content: center; */
+}
+
+.ContainerGrid > * {
+  text-align: center;
+  align-self: flex-start;
+}
+.ContainerGrid > .Pagination {
+  align-self: flex-end;
+}

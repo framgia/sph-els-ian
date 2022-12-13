@@ -77,6 +77,8 @@ const LoginForm = ({ modal, setModal, modalMsg, setModalMsg, setUser }) => {
       error={hasError}
     >
       <div className="ui stacked segment">
+        <h2 className="">Login</h2>
+
         <Form.Input
           className=""
           type="text"

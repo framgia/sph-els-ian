@@ -1,5 +1,6 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { connect } from "react-redux";
+import { isEmpty } from "../utils";
 import Homepage from "../pages/Homepage";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
@@ -14,7 +15,8 @@ import LessonPage from "../pages/user/LessonPage";
 import QuizPage from "../pages/QuizPage";
 import ResultsPage from "../pages/ResultsPage";
 import UserSettings from "../pages/UserSettings";
-const RouteList = () => {
+
+const RouteList = ({ user }) => {
   return (
     <BrowserRouter>
       <Routes>
@@ -24,15 +26,19 @@ const RouteList = () => {
         >
           <Route
             path=""
-            element={<Homepage />}
+            element={
+              isEmpty(user) ? <Homepage /> : <Navigate to="/dashboard" />
+            }
           />
           <Route
             path="login"
-            element={<Login />}
+            element={isEmpty(user) ? <Login /> : <Navigate to="/dashboard" />}
           />
           <Route
             path="register"
-            element={<Register />}
+            element={
+              isEmpty(user) ? <Register /> : <Navigate to="/dashboard" />
+            }
           />
           <Route element={<ProtectedRoutes />}>
             {/* Regular User Routes */}
@@ -79,4 +85,7 @@ const RouteList = () => {
     </BrowserRouter>
   );
 };
-export default RouteList;
+const mapStateToProps = (state) => {
+  return { user: state.user };
+};
+export default connect(mapStateToProps)(RouteList);

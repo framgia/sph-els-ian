@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Form } from "semantic-ui-react";
+import { Form, Header } from "semantic-ui-react";
 import server from "../../api/server";
 import { validateRegistrationForm } from "../../utils";
 const RegistrationForm = ({ setModal, setModalMsg }) => {
@@ -79,6 +79,7 @@ const RegistrationForm = ({ setModal, setModalMsg }) => {
       onSubmit={onSubmit}
     >
       <div className="ui stacked segment">
+        <Header>Registration</Header>
         <Form.Input
           required
           className="register"

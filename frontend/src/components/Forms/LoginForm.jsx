@@ -1,42 +1,42 @@
-import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { Form } from "semantic-ui-react";
-import { connect } from "react-redux";
+import { Button, Form } from "semantic-ui-react";
+import { useDispatch } from "react-redux";
 import server from "../../api/server";
 import { setUser } from "../../actions";
-import { validateLoginForm } from "../../utils";
-const LoginForm = ({ modal, setModal, modalMsg, setModalMsg, setUser }) => {
-  const navigate = useNavigate();
-  const didMount = useRef(false);
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [hasError, setHasError] = useState(false);
-  const [errors, setErrors] = useState({
-    username: "",
-    password: "",
-  });
+import { isEmpty } from "../../utils";
+import { useForm } from "react-hook-form";
 
-  const onSubmit = async (e) => {
-    e.preventDefault();
-    setErrors(validateLoginForm(username, password));
+const LoginForm = ({ setModal, setModalMsg }) => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+  const onSubmit = (data) => {
+    if (isEmpty(errors)) {
+      apiCall(data);
+    }
   };
-  const apiCall = () => {
+
+  const apiCall = ({ Username, Password }) => {
     server
       .post("/api/auth/login", {
-        username,
-        password,
+        username: Username,
+        password: Password,
       })
       .then((response) => {
         window.localStorage.setItem("data", JSON.stringify(response.data));
         window.localStorage.setItem("accessToken", response.data.token);
-        setUser(response.data);
+        dispatch(setUser(response.data));
         navigate("/dashboard");
       })
       .catch((error) => {
         if (error.code === "ERR_NETWORK") {
           setModalMsg({
             header: "503",
-            description: "Server Unavailable",
+            description: "Server Unavailable. Please try again later.",
           });
           setModal(true);
         } else {
@@ -49,74 +49,60 @@ const LoginForm = ({ modal, setModal, modalMsg, setModalMsg, setUser }) => {
       });
   };
 
-  useEffect(() => {
-    if (didMount.current) {
-      let isValid = Object.values(errors).every((value) => value === "");
-      if (isValid) {
-        apiCall();
-      } else {
-        setHasError(true);
-      }
-    }
-    didMount.current = true;
-  }, [errors]);
-
-  const handleUsername = (e) => {
-    e.preventDefault();
-    setUsername(e.target.value);
-  };
-  const handlePassword = (e) => {
-    e.preventDefault();
-    setPassword(e.target.value);
-  };
-
   return (
-    <Form
-      className="ui small form"
-      onSubmit={onSubmit}
-      error={hasError}
-    >
-      <div className="ui stacked segment">
-        <h2 className="">Login</h2>
+    <Form onSubmit={handleSubmit(onSubmit)}>
+      <Form.Input
+        label={<label style={{ display: "none" }}>Username</label>}
+        type="text"
+        placeholder="Username"
+        id="username"
+        error={
+          errors.Username !== undefined
+            ? { content: errors.Username.message, pointing: "below" }
+            : false
+        }
+      >
+        <input
+          {...register("Username", {
+            required: "Username is required",
+            maxLength: 20,
+          })}
+        />
+      </Form.Input>
 
-        <Form.Input
-          className=""
-          type="text"
-          name="username"
-          placeholder="Username"
-          onChange={(e) => handleUsername(e)}
-          value={username}
-          error={
-            errors.username
-              ? { content: errors.username, pointing: "left" }
-              : false
-          }
-        />
-        <Form.Input
-          className=""
+      <Form.Input
+        label={<label style={{ display: "none" }}>Password</label>}
+        type="password"
+        placeholder="Password"
+        id="password"
+        error={
+          errors.Password !== undefined
+            ? { content: errors.Password.message, pointing: "below" }
+            : false
+        }
+      >
+        <input
           type="password"
-          name="password"
+          id="password"
           placeholder="Password"
-          onChange={(e) => handlePassword(e)}
-          value={password}
-          error={
-            errors.password
-              ? { content: errors.password, pointing: "left" }
-              : false
-          }
+          {...register("Password", {
+            required: "Password is required",
+            maxLength: 20,
+          })}
         />
-        <button
-          className="ui fluid tiny teal submit button"
+      </Form.Input>
+      <Form.Field>
+        <Button
+          color="teal"
+          size="large"
+          fluid
           type="submit"
         >
           Login
-        </button>
-      </div>
+        </Button>
+      </Form.Field>
     </Form>
   );
 };
 
-const mapStateToProps = (state) => {
-  return { user: state.user };
-};
-export default connect(mapStateToProps, { setUser })(LoginForm);
+export default LoginForm;

@@ -1,7 +1,8 @@
-import { render, screen } from "../../utils/test";
+import { render, screen, waitFor } from "../../utils/test";
 import userEvent from "@testing-library/user-event";
 import Register from "../Register";
-import server from "../../mocks/server";
+import { server } from "../../mocks/server";
+import { rest } from "msw";
 const mockedNavigate = jest.fn();
 
 jest.mock("react-router-dom", () => ({
@@ -9,20 +10,20 @@ jest.mock("react-router-dom", () => ({
   useNavigate: () => mockedNavigate,
 }));
 
-describe("Homepage Tests", () => {
-  test("Initial Load", async () => {
+describe("Registration Tests", () => {
+  test("Initial Load", () => {
     render(<Register />);
     const userInput = screen.getByLabelText(/username/i);
-    const passInput = screen.getByLabelText(/password/i);
-    const confirmPassInput = screen.getByLabelText(/confirm password/i);
     const emailInput = screen.getByLabelText(/email/i);
+    const passInput = screen.getByLabelText(/^password/i);
+    const confirmPassInput = screen.getByLabelText(/confirm password/i);
     const registerInput = screen.getByRole("button", { name: /register/i });
   });
   test("Missing Username", async () => {
     const user = userEvent.setup();
     render(<Register />);
     const userInput = screen.getByLabelText(/username/i);
-    const passInput = screen.getByLabelText(/password/i);
+    const passInput = screen.getByLabelText(/^password/i);
     const confirmPassInput = screen.getByLabelText(/confirm password/i);
     const emailInput = screen.getByLabelText(/email/i);
     const registerInput = screen.getByRole("button", { name: /register/i });
@@ -47,7 +48,7 @@ describe("Homepage Tests", () => {
     const user = userEvent.setup();
     render(<Register />);
     const userInput = screen.getByLabelText(/username/i);
-    const passInput = screen.getByLabelText(/password/i);
+    const passInput = screen.getByLabelText(/^password/i);
     const confirmPassInput = screen.getByLabelText(/confirm password/i);
     const emailInput = screen.getByLabelText(/email/i);
     const registerInput = screen.getByRole("button", { name: /register/i });
@@ -72,7 +73,7 @@ describe("Homepage Tests", () => {
     const user = userEvent.setup();
     render(<Register />);
     const userInput = screen.getByLabelText(/username/i);
-    const passInput = screen.getByLabelText(/password/i);
+    const passInput = screen.getByLabelText(/^password/i);
     const confirmPassInput = screen.getByLabelText(/confirm password/i);
     const emailInput = screen.getByLabelText(/email/i);
     const registerInput = screen.getByRole("button", { name: /register/i });
@@ -98,7 +99,7 @@ describe("Homepage Tests", () => {
     const user = userEvent.setup();
     render(<Register />);
     const userInput = screen.getByLabelText(/username/i);
-    const passInput = screen.getByLabelText(/password/i);
+    const passInput = screen.getByLabelText(/^password/i);
     const confirmPassInput = screen.getByLabelText(/confirm password/i);
     const emailInput = screen.getByLabelText(/email/i);
     const registerInput = screen.getByRole("button", { name: /register/i });
@@ -117,13 +118,13 @@ describe("Homepage Tests", () => {
     await user.click(registerInput);
 
     const alerts = await screen.findAllByRole("alert");
-    expect(alerts).toHaveLength(1);
+    expect(alerts).toHaveLength(2);
   });
   test("Missing Confirm Password", async () => {
     const user = userEvent.setup();
     render(<Register />);
     const userInput = screen.getByLabelText(/username/i);
-    const passInput = screen.getByLabelText(/password/i);
+    const passInput = screen.getByLabelText(/^password/i);
     const confirmPassInput = screen.getByLabelText(/confirm password/i);
     const emailInput = screen.getByLabelText(/email/i);
     const registerInput = screen.getByRole("button", { name: /register/i });
@@ -148,7 +149,7 @@ describe("Homepage Tests", () => {
     const user = userEvent.setup();
     render(<Register />);
     const userInput = screen.getByLabelText(/username/i);
-    const passInput = screen.getByLabelText(/password/i);
+    const passInput = screen.getByLabelText(/^password/i);
     const confirmPassInput = screen.getByLabelText(/confirm password/i);
     const emailInput = screen.getByLabelText(/email/i);
     const registerInput = screen.getByRole("button", { name: /register/i });
@@ -173,13 +174,16 @@ describe("Homepage Tests", () => {
   test("Username already taken", async () => {
     server.resetHandlers(
       rest.post("http://localhost:3001/api/auth/register", (req, res, ctx) => {
-        res(ctx.status(400).json({ msg: "User already exists" }));
+        return res(
+          ctx.status(400),
+          ctx.json({ message: "User already exists" })
+        );
       })
     );
     const user = userEvent.setup();
     render(<Register />);
     const userInput = screen.getByLabelText(/username/i);
-    const passInput = screen.getByLabelText(/password/i);
+    const passInput = screen.getByLabelText(/^password/i);
     const confirmPassInput = screen.getByLabelText(/confirm password/i);
     const emailInput = screen.getByLabelText(/email/i);
     const registerInput = screen.getByRole("button", { name: /register/i });
@@ -194,11 +198,10 @@ describe("Homepage Tests", () => {
     await user.type(passInput, "123");
 
     await user.clear(confirmPassInput);
-    await user.type(confirmPassInput, "1234");
+    await user.type(confirmPassInput, "123");
 
     await user.click(registerInput);
 
-    const alerts = await screen.findAllByRole("alert");
-    expect(alerts).toHaveLength(1);
+    const alerts = await screen.findByText(/User already exists/i);
   });
 });

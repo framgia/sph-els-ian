@@ -22,7 +22,7 @@ axiosInstance.interceptors.response.use(
     return response;
   },
   (error) => {
-    if (error.response.status === 403) {
+    if (error.response?.status === 403) {
       window.location = "/"; //Temporary fix
     }
     return Promise.reject(error);

@@ -37,4 +37,148 @@ export const handlers = [
       })
     );
   }),
+  rest.post(
+    "http://localhost:3001/api/admin/viewLessonWords/0",
+    (req, res, ctx) => {
+      return res(
+        ctx.json({
+          data: [
+            {
+              id: 1,
+              jp_word: "123",
+              Choices: [
+                { word: "123" },
+                { word: "1" },
+                { word: "2" },
+                { word: "3" },
+              ],
+            },
+            {
+              id: 2,
+              jp_word: "1234",
+              Choices: [
+                { word: "1234" },
+                { word: "1" },
+                { word: "2" },
+                { word: "3" },
+              ],
+            },
+            {
+              id: 3,
+              jp_word: "1231",
+              Choices: [
+                { word: "1231" },
+                { word: "1" },
+                { word: "2" },
+                { word: "3" },
+              ],
+            },
+            {
+              id: 4,
+              jp_word: "1239",
+              Choices: [
+                { word: "1239" },
+                { word: "1" },
+                { word: "2" },
+                { word: "3" },
+              ],
+            },
+            {
+              id: 5,
+              jp_word: "1238",
+              Choices: [
+                { word: "1238" },
+                { word: "1" },
+                { word: "2" },
+                { word: "3" },
+              ],
+            },
+            {
+              id: 6,
+              jp_word: "1237",
+              Choices: [
+                { word: "1237" },
+                { word: "1" },
+                { word: "2" },
+                { word: "3" },
+              ],
+            },
+            {
+              id: 7,
+              jp_word: "1236",
+              Choices: [
+                { word: "1236" },
+                { word: "1" },
+                { word: "2" },
+                { word: "3" },
+              ],
+            },
+            {
+              id: 8,
+              jp_word: "yre",
+              Choices: [
+                { word: "yre" },
+                { word: "1" },
+                { word: "2" },
+                { word: "3" },
+              ],
+            },
+            {
+              id: 9,
+              jp_word: "gfd",
+              Choices: [
+                { word: "gfd" },
+                { word: "1" },
+                { word: "2" },
+                { word: "3" },
+              ],
+            },
+            {
+              id: 10,
+              jp_word: "er",
+              Choices: [
+                { word: "er" },
+                { word: "1" },
+                { word: "2" },
+                { word: "3" },
+              ],
+            },
+          ],
+          totalWords: 12,
+        })
+      );
+    }
+  ),
+  rest.post(
+    "http://localhost:3001/api/admin/viewLessonWords/1",
+    (req, res, ctx) => {
+      return res(
+        ctx.json({
+          data: [
+            {
+              id: 11,
+              jp_word: "abcd",
+              Choices: [
+                { word: "abcd" },
+                { word: "1" },
+                { word: "2" },
+                { word: "3" },
+              ],
+            },
+            {
+              id: 12,
+              jp_word: "abc",
+              Choices: [
+                { word: "abc" },
+                { word: "1" },
+                { word: "2" },
+                { word: "3" },
+              ],
+            },
+          ],
+          totalWords: 12,
+        })
+      );
+    }
+  ),
 ];

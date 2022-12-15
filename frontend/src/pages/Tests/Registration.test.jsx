@@ -1,7 +1,8 @@
 import { render, screen } from "../../utils/test";
 import userEvent from "@testing-library/user-event";
 import Register from "../Register";
-import server from "../../mocks/server";
+import { server } from "../../mocks/server";
+import { rest } from "msw";
 const mockedNavigate = jest.fn();
 
 jest.mock("react-router-dom", () => ({

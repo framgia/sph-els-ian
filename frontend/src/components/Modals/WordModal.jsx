@@ -56,7 +56,6 @@ const WordModal = ({
       server
         .post("/api/admin/editWord", payload)
         .then((response) => {
-          console.log(response);
           cancelModal();
           dispatch(fetchWords(offset, lessonId));
         })
@@ -74,16 +73,17 @@ const WordModal = ({
       server
         .post("/api/admin/addWord", payload)
         .then((response) => {
-          setIsLoading(false);
           cancelModal();
           dispatch(fetchWords(offset, lessonId));
         })
         .catch((error) => {
-          setIsLoading(false);
           let msg = error.response
             ? error.response.data.message
             : "Server is down. Please try again later.";
           setError("server", { type: "custom", message: msg });
+        })
+        .finally(() => {
+          setIsLoading(false);
         });
     }
   };
@@ -182,18 +182,18 @@ const WordModal = ({
             </div>
           </div>
         </div>
-
-        <div className="row">
-          <div className="two wide column"></div>
-          <div className="twelve wide column">
-            {errors.server && (
+        {errors.server && (
+          <div className="row">
+            <div className="two wide column"></div>
+            <div className="twelve wide column">
               <Message
                 error
+                role="alert"
                 header={errors.server.message}
               />
-            )}
+            </div>
           </div>
-        </div>
+        )}
       </Modal.Content>
       <Modal.Actions>
         <Button

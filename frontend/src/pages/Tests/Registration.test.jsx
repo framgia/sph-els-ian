@@ -1,4 +1,4 @@
-import { render, screen } from "../../utils/test";
+import { getByRole, render, screen } from "../../utils/test";
 import userEvent from "@testing-library/user-event";
 import Register from "../Register";
 import { server } from "../../mocks/server";
